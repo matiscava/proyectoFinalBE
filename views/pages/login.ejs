@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carga de producto</title>
+    <link rel="stylesheet" type="text/css" href="/css/estilos.css" />
+
+</head>
+<body>
+    <div class="formContainer">
+        <h1 class="formTitle">Login de Usuario</h1>
+
+        <form action="/api/users/login" method="post" autocomplete="off">
+            <div >
+                <label class="formLabel" for="username">Ingrese su mail: <input id="username" type="text" name="username" required></label>
+                <label class="formLabel" for="password">Ingrese su password: <input id="password" type="password" name="password" required></label>
+                </div>
+            <button class="formBtn">Enviar</button>
+        </form>
+        <hr>
+        <button class="btnLink" onclick="location.href='/api/users/signup'">
+            ir a Registrarse
+        </button>
+    </div>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body>
+  <div class="userContainer">
+    <% if (!usuario){%>
+        <div class="unlogContainer">
+            <h1> Usted no se ha logueado </h1>
+            <div class="btnContainer">
+                <button class="btnHome" onclick="location.href='/api/users/login'">
+                    Loguearse
+                </button>
+                
+                <button class="btnHome" onclick="location.href='/api/users/signup'">
+                    Registrarse
+                </button>
+                <button class="btnHome" onclick="location.href='/api/carts'">
+                    Ver carritos creados
+                </button>
+            </div>
+        </div>
+    <%} else {%>
+        <div class="logContainer">
+            <h1>
+                Bienvenide, <%= usuario.email %>
+                    <button class="btnHome" onclick="location.href='/api/users/logout'">
+                        Desloguear
+                    </button>
+                    <button class="btnHome" onclick="location.href='/api/carts'">
+                        Ver carritos creados
+                    </button>
+                    <button class="btnHome" onclick="location.href='/api/users/info'">
+                        Información del usuario
+                    </button>
+            </h1>
+        </div>  
+     <% } %> 
+
+     <% if (usuario && usuario.admin === true){%>    
+      <form action="/api/products/<%= product.id %> " method="POST" autocomplete="off">
+          <div >
+              <label class="formLabel" for="title">Ingrese el nombre del producto: <input id="title" type="text" name="title" value="<%= product.title  %> " required></label>
+              <label class="formLabel" for="description">Ingrese la descripción del producto: <input id="description" type="text" name="description" value="<%= product.description  %> " required></label>
+              <label class="formLabel" for="price">Ingrese el precio del producto: <input id="price" type="number" name="price" value=<%= product.price  %> required></label>
+              <label class="formLabel" for="stock">Ingrese el stock del producto: <input id="stock" type="number" name="stock" value=<%= product.stock  %> required></label>
+              <label class="formLabel" for="category">Ingrese la categoria del producto: <input id="category" type="text" name="category" value="<%= product.category  %> " required></label>
+              <label class="formLabel" for="photo">Ingrese la URL con la imagen del producto: <input id="photo" type="text" name="photo" value="<%= product.photo  %> " required></label>
+          </div>
+          <input type="submit" value="Editar">
+          <input type="hidden" name="_method" value="PUT">
+
+          <!-- <button class="formBtn" id="btnNewProduct">Enviar</button> -->
+      </form>
+  <% } %>
+
+</body>
+</html>

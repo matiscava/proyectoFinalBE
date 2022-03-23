@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carrito</title>
+
+  <link rel="stylesheet" href="/css/estilos.css">
+
+</head>
+<body>
+  <div class="userContainer">
+    <% if (!usuario){%>
+        <div class="unlogContainer">
+            <h1> Usted no se ha logueado </h1>
+            <div class="btnContainer">
+                <button class="btnHome" onclick="location.href='/api/users/login'">
+                    Loguearse
+                </button>
+                <button class="btnHome" onclick="location.href='/api/users/signup'">
+                    Registrarse
+                </button>
+                <button class="btnHome" onclick="location.href='/api/products'">
+                    Ir a productos
+                </button>
+                <button class="btnHome" onclick="location.href='/api/carts'">
+                  Ir a carritos
+                </button>
+            </div>
+        </div>
+    <%} else {%>
+        <div class="logContainer">
+            <h1>
+                Bienvenide, <%= usuario.email %>
+                  <button class="btnHome" onclick="location.href='/api/users/logout'">
+                    Desloguear
+                  </button>
+                  <button class="btnHome" onclick="location.href='/api/products'">
+                    Ir a productos
+                  </button>
+                  <button class="btnHome" onclick="location.href='/api/carts'">
+                    Ir a carritos
+                  </button>
+                  <button class="btnHome" onclick="location.href='/api/users/info'">
+                    Información del usuario
+                  </button>
+            </h1>
+        </div>      
+    <%}%>
+    <div class="cartContainer">
+      <div class="cartProducts">
+        <% productsList.forEach( (product) => { %>
+          <div class="productCartContainer">
+            <div class="cartProductImgContainer">
+              <img src="<%= product.photo %>" alt='imagen de producto <%= product.code %>' class="cartProductImage">
+            </div>
+            <div class="productCartTextos">
+              <div class="productCartMainText">
+                <p class="productCartTitle"><%= product.title %></p>
+                <p class="productCartPrice">Valor: $<%= product.price %></p>
+                <p class="productCartStock">Stock: <%= product.stock %></p>
+              </div>
+              <form action="/api/carts/<%= cartID %>/products" method="post" class="productCartForm">
+                <input type="text" name="id" id="id" value="<%=product.id%>" style="display: none;">
+                <label for="quantity" class="cartLabel">Cantidad: <input class="inputQuantity" type="number" name="quantity" id="quantity" min="0" max="<%= product.stock %>" ></label>
+                <button>Agregar al carrito</button>
+              </form>
+            </div>
+          </div>
+        <% } )%>
+      </div>
+      <div class="cartItems">
+        <p class="cartID">
+          Carrito ID N° <%= cartID %>
+        </p>
+        <div class="cartItemsContainer">
+          <% cart.products.forEach( (product) => { %>
+            <div class="cartItemContainer">
+              <div class="cartItemImgContainer">
+                <img src="<%= product.photo %>" alt='imagen de producto <%= product.code %>' class="productoImagen">
+              </div>
+              <div class="cartItemsTexts">
+                <p class="cartItemTitle"><%= product.title %></p>
+                <p class="cartItemQunatity">Cantidad: <%= product.quantity %></p>
+                <p class="cartItemQunatity">Valor por unidad: $<%= product.price %></p>
+                <p class="cartItemQunatity">Subtotal: $<%= product.quantity * product.price %></p>
+              </div>
+              <form action="/api/carts/<%= cartID %>/products/<%= product.id %>" method="POST" class="deleteProductForm" >
+                <input type="button" value="Eliminar producto" onclick="deleteProduct(this)">
+                <input type="hidden" name="_method" value="DELETE">
+            </form>
+            </div>
+          <% } )%>
+          <p class="cartValorTotal">Total: $<%= precioFinal %></p>
+        <% if (!usuario){%>
+          <button class="btnBuy" onclick="location.href='/api/users/login'"> Realizar compra </button>
+          <% } else { %>
+            <button class="btnBuy" onclick="location.href='/api/carts/<%= cartID %>/products/compra'"> Realizar compra </button>
+          <% }%>
+        
+        </div>
+      </div>
+    </div>
+    <script>
+      function deleteProduct(input){
+        const deleteOk = confirm('¿Estás seguro de eliminar el producto?')
+        return (deleteOk) ? input.parentNode.submit() : false
+      }
+    </script>
+</body>
+</html>

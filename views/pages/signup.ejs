@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/estilos.css">
+  <title>Formulario de Ingreso</title>
+</head>
+
+<body>
+  <div class="formContainer">
+    <h1 class="formTitle">Signup de Usuario</h1>
+
+    <form action="/api/users/signup" method="post" autocomplete="off">
+        <div >
+            <label class="formLabel" for="name">Ingrese su nombre: <input id="name" type="text" name="name" onchange="habilitarBtn()" required></label>
+            <label class="formLabel" for="lastname">Ingrese su apellido: <input id="lastname" type="text" name="lastname" onchange="habilitarBtn()" required></label>
+            <label class="formLabel" for="photo">Ingrese la URL de su avatar: <input id="photo" type="text" name="photo"></label>
+            <label class="formLabel" for="username">Ingrese su username: <input id="username" type="text" name="username" onchange="habilitarBtn()" required></label> 
+            <label class="formLabel" for="email">Ingrese su email: <input id="email" type="email" name="email" onchange="habilitarBtn()" required></label>
+            <label class="formLabel" for="phone">Ingrese su telefono de contacto: 
+            <input type="text" id="phone" name="phone" onchange="habilitarBtn()" required>
+            <select id="select-country">
+                <option value="US">US</option>
+                <option value="AR">AR</option>
+                <option value="UY">UY</option>
+                <option value="GB">GB</option>
+                <option value="BR">BR</option>
+            </select>
+            </label>
+            <label class="formLabel" for="adress">Ingrese su domicilio de entrega: <input id="adress" type="text" name="adress" onchange="habilitarBtn()" required></label>
+            <label class="formLabel" for="password">Ingrese su contraseña: <input id="password" type="password" name="password" minlength="6" maxlength="12" onchange="habilitarBtn()" required></label>
+            <label class="formLabel" for="rePassword">Repita su contraseña: <input id="rePassword" type="password" name="rePassword" minlength="6" maxlength="12" onkeyup="habilitarBtn()" required></label>
+        </div>
+        <button class="formBtn" id="btnFormSignup" disabled>Enviar</button>
+    </form>
+    <hr>
+    <button class="btnLink" onclick="location.href='/api/users/login'">
+        ir al Login
+    </button>
+
+  </div>
+    <!-- Inicio del script -->
+    <script src="/js/cleave.js"></script>
+    <script src="/js/cleave-phone.i18n.js"></script>
+
+    <script>
+        const btn = document.getElementById('btnFormSignup');
+        
+        function habilitarBtn() {
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const rePassword = document.getElementById('rePassword').value;
+            const name = document.getElementById('name').value;
+            const lastname = document.getElementById('lastname').value;
+            const phone = document.getElementById('phone').value;
+            const adress = document.getElementById('adress').value;
+
+            let passChecked = false;
+            if ( password.length > 1 && password === rePassword ) passChecked = true
+            else passChecked = false;
+    
+            if ( name && lastname && username && email && phone && adress && passChecked )
+            {
+                btn.disabled = false
+            }
+            else
+            {
+                btn.disabled = true
+            }
+        }
+        
+        const cleave = new Cleave('#phone', {
+            phone: true,
+            phoneRegionCode: 'AR'
+        })
+        const paisElegido = document.getElementById('select-country')
+        paisElegido.onChange( () => {
+            cleave.setPhoneRegionCode(this.value)
+            cleave.setRawValue('')
+        } )
+
+    </script>
+</body>
+</html>

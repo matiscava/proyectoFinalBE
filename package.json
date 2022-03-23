@@ -1,0 +1,38 @@
+{
+  "name": "proyecto-final-back-end",
+  "version": "3.0.0",
+  "description": "Desarrollamos una API Restful ",
+  "main": "src/main.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon src/main.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "matiscava",
+  "license": "ISC",
+  "dependencies": {
+    "assert": "^2.0.0",
+    "bcrypt": "^5.0.1",
+    "cleave.js": "^1.6.0",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.0.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.3",
+    "express-method-override": "^0.0.3",
+    "express-session": "^1.17.2",
+    "logger": "^0.0.1",
+    "mongodb": "^4.4.1",
+    "mongoose": "^6.2.7",
+    "nodemailer": "^6.7.3",
+    "nodemailer-smtp-transport": "^2.7.4",
+    "passport": "^0.5.2",
+    "passport-local": "^1.0.0",
+    "socket.io": "^4.4.1",
+    "twilio": "^3.75.1",
+    "winston": "^3.6.0"
+  },
+  "devDependencies": {
+    "axios": "^0.26.1",
+    "nodemon": "^2.0.15"
+  }
+}
