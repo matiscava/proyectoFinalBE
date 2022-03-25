@@ -110,7 +110,7 @@ const loginPassportUser =   async (username , password , done ) => {
     delete user._id;
   } 
 
-  return done ( null , user )
+  return done ( null , user.id )
   
 }
 

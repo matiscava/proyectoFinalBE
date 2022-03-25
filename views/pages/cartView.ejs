@@ -96,7 +96,7 @@
         <% if (!usuario){%>
           <button class="btnBuy" onclick="location.href='/api/users/login'"> Realizar compra </button>
           <% } else { %>
-            <button class="btnBuy" onclick="location.href='/api/carts/<%= cartID %>/products/compra'"> Realizar compra </button>
+            <button class="btnBuy" onclick="location.href='/api/carts/<%= cartID %>/products/confirm-buy'"> Realizar compra </button>
           <% }%>
         
         </div>

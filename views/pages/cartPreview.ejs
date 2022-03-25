@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="/css/estilos.css">
+
+  <title>Cart Preview</title>
+</head>
+<body>
+  <div class="logContainer">
+    <h1>
+        Bienvenide, <%= user.email %>
+          <button class="btnHome" onclick="location.href='/api/users/logout'">
+            Desloguear
+          </button>
+          <button class="btnHome" onclick="location.href='/api/products'">
+            Ir a productos
+          </button>
+          <button class="btnHome" onclick="location.href='/api/carts'">
+            Ir a carrito 
+          </button>
+          <button class="btnHome" onclick="location.href='/api/users/info'">
+            Información del usuario
+          </button>
+    </h1>
+</div>      
+  <h2>Felicitaciones <%= user.username %>, está por finalizar su compra. Hemos actualizado su carrito según el stock disponible actualmente y aguardamos su confirmación para concluir con la compra.</h2>
+  <% cart.products.forEach( (product) => { %>
+    <div class="cartItemContainer">
+      <div class="cartItemsTexts">
+        <p class="cartItemTitle"><%= product.title %></p>
+        <p class="cartItemQunatity">Cantidad: <%= product.quantity %></p>
+        <p class="cartItemQunatity">Valor por unidad: $<%= product.price %></p>
+        <p class="cartItemQunatity">Subtotal: $<%= product.quantity * product.price %></p>
+      </div>
+    </div>
+  <%})%>
+  <p class="cartValorTotal">Total: $<%= precioFinal %></p>
+  
+  <button class="btnBuy" onclick="location.href='/api/carts/<%= cart.id %>/products/finish-buy'"> Realizar compra </button>
+  
+</body>
+</html>

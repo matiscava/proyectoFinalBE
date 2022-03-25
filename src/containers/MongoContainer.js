@@ -51,8 +51,8 @@ class MongoContainer {
   async createProduct(producto) {
     try {
       console.log('createProduct', producto);
-      const fecha = new Date().toLocaleString();
-      let agregarData={...producto, timestamp:fecha}
+      const date = new Date().toLocaleString();
+      let agregarData={...producto, timestamp:date}
 
       const document = await new this.collection(agregarData);
       const response = await document.save()
@@ -83,8 +83,8 @@ class MongoContainer {
   }
 
   async update(id, element) {
-    const fecha = new Date().toLocaleString();
-    const newInfo = {...element,timestamp:fecha};
+    const date = new Date().toLocaleString();
+    const newInfo = {...element,timestamp:date};
     
     const { n, nModified } = await this.collection.updateOne({ _id: id }, {
       $set: newInfo
@@ -101,8 +101,8 @@ class MongoContainer {
   
   async newCart(){
     try{
-        const fecha = new Date().toLocaleString();
-        let carritoNuevo={ timestamp: fecha, products:[] };
+        const date = new Date().toLocaleString();
+        let carritoNuevo={ timestamp: date, products:[] };
         const document = await new this.collection(carritoNuevo);
         const response = await document.save()
         const result = renameField(asPOJO(document), '_id', 'id')  
@@ -117,13 +117,13 @@ class MongoContainer {
   async addCartToUser(userID,cartID) {
     try{
       const user = this.getById(userID);
-      const fecha = new Date().toLocaleString();
+      const date = new Date().toLocaleString();
 
       if(user.cart){
         return null;
       }else{
         const { n, nModified } = await this.collection.updateOne({ _id: userID }, {
-          $set: {cart:cartID,timestamp:fecha}
+          $set: {cart:cartID,timestamp:date}
         })
         if (n == 0 || nModified == 0) {
           logger.error(`Elemento con el id: '${id}' no fue encontrado`);
@@ -139,11 +139,11 @@ class MongoContainer {
 
   async addUserToCart(cartID,user){
     try{
-      const fecha = new Date().toLocaleString();
+      const date = new Date().toLocaleString();
       let { email: userEmail , adress: userAdress } = user;
 
       const { n, nModified } = await this.collection.updateOne({ _id: cartID }, {
-        $set: {adress: userAdress, email: userEmail,timestamp:fecha}
+        $set: {adress: userAdress, email: userEmail,timestamp:date}
       })
       if (n == 0 || nModified == 0) {
         logger.error(`Elemento con el id: '${id}' no fue encontrado`);
@@ -157,18 +157,23 @@ class MongoContainer {
   }
 
   async closeCart(userID,ticketID){
-    const fecha = new Date().toLocaleString();
-    
-    await this.collection.updateOne({ _id: userID },{$set:{cart:'', timestamp: fecha}})
-    await this.collection.updateOne({ _id: userID },{$addToSet :{'orders':ticketID}})
+    try {
+      const date = new Date().toLocaleString();
+      
+      await this.collection.updateOne({ _id: userID },{$set:{cart:'', timestamp: date}})
+      await this.collection.updateOne({ _id: userID },{$addToSet :{'orders':ticketID}})
+    } catch (error) {
+      logger.error('Error: ', error);
+      throw error;
+    }
   }
 
   async addProduct(carritoId,product){
     try {
       const prod = product;
-      const fecha = new Date().toLocaleString();
+      const date = new Date().toLocaleString();
       const documents = await this.collection.updateOne({ _id: carritoId },{
-        $set:{products:prod,timestamp: fecha}
+        $set:{products:prod,timestamp: date}
       })
     } catch (error) {
       logger.error('Error: ', error);
@@ -188,10 +193,10 @@ class MongoContainer {
   
   async emptyCart(carritoId){
     try{
-      const fecha = new Date().toLocaleString();
+      const date = new Date().toLocaleString();
 
       this.collection.updateOne({ _id: carritoId },{$set: {products:[]}});
-      this.collection.updateOne({ _id: carritoId },{$set: {timestamp:fecha}});
+      this.collection.updateOne({ _id: carritoId },{$set: {timestamp:date}});
     
     } catch (error) {
         logger.error('Error: ', error);
@@ -201,14 +206,14 @@ class MongoContainer {
 
   async deleteItem(carritoId, productoId){
     try{
-      const fecha = new Date().toLocaleString();
+      const date = new Date().toLocaleString();
       const cart = await this.getCart(carritoId)
-      const productList = cart[0].products;
-      const newProductList = productList.find(prod => prod.id == productoId)
-      const data = {timestamp:fecha,products: newProductList}
+      const productsList = cart[0].products;
+      const newProductList = productsList.find(prod => prod.id == productoId)
+      const data = {timestamp:date,products: newProductList}
       console.log(data);
       await this.collection.updateOne({ _id: carritoId },{$pull: {products: newProductList}});
-      await this.collection.updateOne({ _id: carritoId },{$set: {timestamp:fecha}});      
+      await this.collection.updateOne({ _id: carritoId },{$set: {timestamp:date}});      
       return true
 
     } catch (error) {
@@ -219,7 +224,20 @@ class MongoContainer {
 
   async createUser (user) {
     try{
-      console.log('usuario recibido', user);
+      const userList = await this.getAll();
+
+      //CORROBORANDO QUE NO SE REPITA EL USERNAME EN LA BASE DE DATOS
+      let userRepeated = userList.find(usu => usu.username == user.username)
+      if (userRepeated){
+        logger.error(`El usuario ${user.username} ya está utilizado, ingrese otro username`)
+        return false
+      } 
+      // CORROBORANDO QUE NO SE REPITA EL EMAIL EN LA BASE DE DATOS
+      userRepeated = userList.find(usu => usu.email == user.email)
+      if (userRepeated){
+        logger.error(`El mail de contacto ${user.email} ya está utilizado, ingrese otro email`)
+        return false
+      } 
       const document = await this.collection(user);
       const response = await document.save()
       logger.info('Cliente creado', response);
@@ -237,6 +255,25 @@ class MongoContainer {
       return user;
     }catch(err){logger.error(`Error: ${err}`)}
   }
+
+  async previewTicket (cart,productsList){
+    try{
+      
+      const cartProductsList = cart.products
+      
+      cartProductsList.forEach(prod => {
+        let productRepeated = productsList.find( (produ) => produ.id === prod.id )
+        if(prod.quantity > productRepeated.stock) {
+          prod.quantity = productRepeated.stock;
+        }
+      })
+      await this.addProduct(cart.id , cartProductsList)
+      console.log(`Se ha modificado el carrito ${cart.id}`);
+      const updatedCart =  await this.getById(cart.id)
+      return updatedCart
+    }catch(err){logger.error(`Error: ${err}`)}
+  }
+  
 
   async createTicket (ticketCompra) {
     try{
@@ -283,7 +320,7 @@ class MongoContainer {
 
    for( let i = 0 ; i < newStock.length ; i++){
      const updatedProduct = await this.update(newStock[i].id , {stock: newStock[i].stock})
-     console.log(`Se ha modificado el producto ${newStock[i].title}`);
+     console.log(`Se ha modificado el producto id: ${newStock[i].id}`);
     }
     }catch(err){logger.error(`Error: ${err}`)}
   }

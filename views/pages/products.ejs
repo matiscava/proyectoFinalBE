@@ -24,6 +24,9 @@
                     <button class="btnHome" onclick="location.href='/api/carts'">
                         Ver carritos creados
                     </button>
+                    <form action="/api/carts" method="post" autocomplete="off">
+                        <button class="btnHome" id="btnnewCart">Crear carrito</button>            
+                    </form>
                 </div>
             </div>
         <%} else {%>
@@ -41,6 +44,9 @@
                         <button class="btnHome" onclick="location.href='/api/carts'">
                             Ver carritos creados
                         </button>
+                        <form action="/api/carts" method="post" autocomplete="off">
+                            <button class="btnHome" id="btnnewCart">Crear carrito</button>            
+                        </form>
                         <% } %> 
                         <button class="btnHome" onclick="location.href='/api/users/info'">
                             Información del usuario
@@ -48,7 +54,7 @@
                 </h1>
             </div>  
             <% if (usuario && usuario.admin === true){%>    
-                <form action="/api/products" method="post" autocomplete="off">
+                <form action="/api/products" method="post" autocomplete="off" id="formAddProduct">
                     <div >
                         <label class="formLabel" for="title">Ingrese el nombre del producto: <input id="title" type="text" name="title" onchange="habilitarBtn()" required></label>
                         <label class="formLabel" for="description">Ingrese la descripción del producto: <input id="description" type="text" name="description" onchange="habilitarBtn()" required></label>
@@ -59,6 +65,8 @@
                     </div>
                     <button class="formBtn" id="btnNewProduct" disabled>Enviar</button>
                 </form>
+                <button id="btnAddProduct" onclick=fadeToggleForm()>Agregar producto</button>
+                <!-- <a href="btnAddProduct">Agregar producto</a> -->
             <% } %>
         <%}%>
             
@@ -90,7 +98,7 @@
     </div>
 
     <script>
-        const btn = document.getElementById('btnNewProduct');
+        const btnAddNewProduct = document.getElementById('btnNewProduct');
         // const btnDelete = document.getElementById('btnDeleteProduct');
         
         function habilitarBtn() {
@@ -103,17 +111,30 @@
 
             if ( title && description && stock && price && category && photo )
             {
-                btn.disabled = false
+                btnAddNewProduct.disabled = false
             }
             else
             {
-                btn.disabled = true
+                btnAddNewProduct.disabled = true
             }
         }
 
         function deleteProduct(input){
             const deleteOk = confirm('¿Estás seguro de eliminar el producto?')
             return (deleteOk) ? input.parentNode.submit() : false
+        }
+
+        const newProductForm = document.getElementById('formAddProduct');
+        const toggleBtn = document.getElementById('btnAddProduct')
+
+        function fadeToggleForm(){
+            newProductForm.classList.toggle('fade-in')
+            if(newProductForm.classList.contains('fade-in')){
+                toggleBtn.innerHTML = 'Ocultar Formulario'
+            }else{
+                toggleBtn.innerHTML = 'Agregar Producto'
+            }
+            console.log('probando');
         }
     </script>
 

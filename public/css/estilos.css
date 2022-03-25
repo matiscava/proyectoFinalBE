@@ -58,6 +58,24 @@ body {
   border-color: #dfce58;
   background: #766b19;
 }
+/*ADD PRODUCT FORM*/
+
+#formAddProduct {
+  display: none;
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: 0.5s ease-out;
+}
+#formAddProduct.fade-in {
+  display: block;
+  opacity: inherit;
+  height: max-content;
+}
+
+.formAddProduct:not(.fade-in) {
+  display: none;
+}
 
 /* FAIL LOGIN */
 

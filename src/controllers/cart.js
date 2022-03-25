@@ -91,7 +91,7 @@ const getCartProducts = async (req,res) => {
     try{
         const carritoID = req.params.id;
         const carritoElegido = await cartsDao.getById(carritoID);
-        const productList = await productsDao.getAll();
+        const productsList = await productsDao.getAll();
         const idMongo = req.session && req.session.idMongo;
         const usuario = await usersDao.getById(idMongo);
 
@@ -105,7 +105,7 @@ const getCartProducts = async (req,res) => {
         if (carritoElegido===undefined){
             res.send({error: -4, descripcion: `el carrito ID ${carritoID} no existe ingrese otro ID`});
         }else{
-            res.render(path.join(process.cwd(), '/views/pages/cartView.ejs'), {usuario, cart: carritoElegido, cartID: carritoID, productsList: productList, precioFinal})
+            res.render(path.join(process.cwd(), '/views/pages/cartView.ejs'), {usuario, cart: carritoElegido, cartID: carritoID, productsList: productsList, precioFinal})
       
         }
     }catch(err){console.error('error:',err);}
@@ -140,6 +140,25 @@ const removeCartProduct = async (req,res) => {
           res.send({error: -3, descripcion: `el producto ID ${productoID} no existe en el carrito ID ${carritoID}`});
       }
   }
+}
+
+const previewTicket = async ( req , res ) => {
+    const carritoID = req.params.id;
+    const carritoElegido = await cartsDao.getById(carritoID);
+    const idMongo = req.session && req.session.idMongo;
+    const usuario = await usersDao.getById(idMongo);
+
+    const productsList = await productsDao.getAll();
+
+    const updatedCart = await cartsDao.previewTicket(carritoElegido,productsList)
+    let precioFinal = 0;
+    carritoElegido.products.forEach( (producto) => {
+        let subTotal = producto.quantity * producto.price
+        precioFinal += subTotal;
+    });
+    // res.json({productsList,carritoElegido})
+    res.render(path.join(process.cwd(), '/views/pages/cartPreview.ejs'), { user: usuario, cart: updatedCart, precioFinal})
+
 }
 
 const mekeTicket = async ( req , res ) => {
@@ -204,5 +223,6 @@ export default {
     getCartProducts,
     removeCart,
     removeCartProduct,
-    mekeTicket
+    mekeTicket,
+    previewTicket
 }

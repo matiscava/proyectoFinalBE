@@ -24,8 +24,8 @@ passport.use('signup', new LocalStrategy(
   userController.signupPassportUser
 ) )
 
-passport.serializeUser( ( user , done) => {
-  done( null , user.id);
+passport.serializeUser( ( userID , done) => {
+  done( null , userID);
 } )
 passport.deserializeUser( async ( id , done ) => {
 

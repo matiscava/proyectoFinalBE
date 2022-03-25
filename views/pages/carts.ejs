@@ -51,7 +51,7 @@
 
         <div class="cartListContainer">
             <% listaCarritos.forEach( (cart) => { %>
-                <% if(!cart.email){ %>
+                <% if(!cart.email ){ %>
                 <div class="cart" id="cart-<%=cart.id%>">
                     <div class="cartTextos">
                         <p class="cartId">Carrito id: <i><%= cart.id %></i></p>

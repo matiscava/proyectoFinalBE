@@ -31,6 +31,9 @@ cartRouter.delete('/:id/products/:id_prod', cartController.removeCartProduct )
 
 //FINALIZAR LA COMPRA
 
-cartRouter.get( '/:id/products/compra', cartController.mekeTicket )
+cartRouter.get( '/:id/products/confirm-buy', cartController.previewTicket )
+
+cartRouter.get( '/:id/products/finish-buy', cartController.mekeTicket )
+
 
 export default cartRouter;
