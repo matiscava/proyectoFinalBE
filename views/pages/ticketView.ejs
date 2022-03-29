@@ -7,12 +7,12 @@
 
   <link rel="stylesheet" href="/css/estilos.css">
 
-  <title>Cart Preview</title>
+  <title>Ticket de compra</title>
 </head>
 <body>
   <div class="logContainer">
     <h1>
-        Bienvenide, <%= user.email %>
+        Bienvenide, <%= cartTicket.email %>
           <button class="btnHome" onclick="location.href='/api/users/logout'">
             Desloguear
           </button>
@@ -20,7 +20,7 @@
             Ir a productos
           </button>
           <button class="btnHome" onclick="location.href='/api/carts'">
-            Ir a carrito 
+            Ir a carritos
           </button>
           <button class="btnHome" onclick="location.href='/api/chat'">
             Ir al chat
@@ -30,8 +30,9 @@
           </button>
     </h1>
 </div>      
-  <h2>Felicitaciones <%= user.username %>, está por finalizar su compra. Hemos actualizado su carrito según el stock disponible actualmente y aguardamos su confirmación para concluir con la compra.</h2>
-  <% cart.products.forEach( (product) => { %>
+  <h2>Felicitaciones <%= cartTicket.username %>, ha finalizado su compra</h2>
+  <p>El número de referencia es <%= ticketId %></p>
+  <% cartTicket.cart[0].products.forEach( (product) => { %>
     <div class="cartItemContainer">
       <div class="cartItemsTexts">
         <p class="cartItemTitle"><%= product.title %></p>
@@ -41,9 +42,7 @@
       </div>
     </div>
   <%})%>
-  <p class="cartValorTotal">Total: $<%= precioFinal %></p>
-  
-  <button class="btnBuy" onclick="location.href='/api/carts/<%= cart.id %>/products/finish-buy'"> Realizar compra </button>
-  
+  <p class="cartValorTotal">Total: $<%= cartTicket.price %></p>
+
 </body>
 </html>

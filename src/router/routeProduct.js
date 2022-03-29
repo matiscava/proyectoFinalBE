@@ -21,6 +21,8 @@ productsRouter.get('/:id', productController.getProduct );
 
 //MODIFICA UN PRODUCTO ESPECIFICO
 
-productsRouter.put('/:id', productController.setProduct );
+productsRouter.put('/editar/:id', productController.setProduct );
+productsRouter.get('/editar/:id', productController.getEditProduct );
+
 
 export default productsRouter;

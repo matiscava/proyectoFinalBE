@@ -59,6 +59,19 @@ const getProduct = async (req,res)=>{
   if(findObjeto===null){
       res.send({error: -3, descripcion: `el objeto ID ${findID} no existe ingrese otro ID`});
   }else{
+      res.render(path.join(process.cwd(), '/views/pages/productView.ejs'), {usuario: usuario, product: findObjeto})
+
+  }
+}
+
+const getEditProduct = async (req,res)=>{   
+  const findID = req.params.id;
+  const findObjeto = await productsDao.getById(findID)
+  const idMongo = req.session && req.session.idMongo;
+  const usuario = await usersDao.getById(idMongo);
+  if(findObjeto===null){
+      res.send({error: -3, descripcion: `el objeto ID ${findID} no existe ingrese otro ID`});
+  }else{
       res.render(path.join(process.cwd(), '/views/pages/editProduct.ejs'), {usuario: usuario, product: findObjeto})
 
   }
@@ -68,7 +81,6 @@ const setProduct = async (req,res)=>{
 
   const findID = req.params.id;
   const productoBody = req.body;
-  console.log('setProduct', productoBody);
   const findObjeto = await productsDao.getById(findID)
   const idMongo = req.session && req.session.idMongo;
   const usuario = await usersDao.getById(idMongo);
@@ -92,5 +104,6 @@ export default {
   createProduct,
   deleteProduct,
   getProduct,
-  setProduct
+  setProduct,
+  getEditProduct
 }

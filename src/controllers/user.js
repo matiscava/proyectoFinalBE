@@ -9,7 +9,7 @@ import Singleton from '../utils/Singleton.js';
 import { renameField } from '../utils/objectsUtils.js';
 
 const { daos } = Singleton.getInstance()
-const {usersDao} = daos;
+const { usersDao , ticketsDao } = daos;
 
 const loginUser = async ( req , res ) => {
   if (req.isAuthenticated()) {
@@ -84,7 +84,14 @@ const infoUser = async ( req , res ) => {
   if (!usuario) {
     res.redirect('/api/users/login')
   }else{
-    res.render(path.join(process.cwd(), '/views/pages/info.ejs'),{usuario})
+    let orders = []
+
+    for(let i = 0 ; i < usuario.orders.length; i++){
+      const userOrder = await ticketsDao.getById(usuario.orders[i])
+      orders.push(userOrder)
+
+    }
+    res.render(path.join(process.cwd(), '/views/pages/info.ejs'),{usuario,orders})
   }
 
 }

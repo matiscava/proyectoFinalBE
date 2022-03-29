@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario de Ingreso</title>
-    <link rel="stylesheet" href="/css/estilos.css">
+    <link rel="stylesheet" href="/css/estilos.css"> 
 </head>
 
 <body>
@@ -24,15 +24,19 @@
                     <button class="btnHome" onclick="location.href='/api/carts'">
                         Ver carritos creados
                     </button>
-                    <form action="/api/carts" method="post" autocomplete="off">
+                    <form action="/api/carts" id="containerCreateCart" method="post" autocomplete="off">
                         <button class="btnHome" id="btnnewCart">Crear carrito</button>            
                     </form>
+                    <button class="btnHome" onclick="location.href='/api/chat'">
+                        Ir al chat
+                    </button>  
                 </div>
             </div>
         <%} else {%>
             <div class="logContainer">
                 <h1>
                     Bienvenide, <%= usuario.email %>
+                </h1>
                         <button class="btnHome" onclick="location.href='/api/users/logout'">
                             Desloguear
                         </button>
@@ -48,59 +52,99 @@
                             <button class="btnHome" id="btnnewCart">Crear carrito</button>            
                         </form>
                         <% } %> 
+                        <button class="btnHome" onclick="location.href='/api/chat'">
+                            Ir al chat
+                        </button>                          
                         <button class="btnHome" onclick="location.href='/api/users/info'">
                             Información del usuario
                         </button>
-                </h1>
             </div>  
             <% if (usuario && usuario.admin === true){%>    
                 <form action="/api/products" method="post" autocomplete="off" id="formAddProduct">
                     <div >
-                        <label class="formLabel" for="title">Ingrese el nombre del producto: <input id="title" type="text" name="title" onchange="habilitarBtn()" required></label>
-                        <label class="formLabel" for="description">Ingrese la descripción del producto: <input id="description" type="text" name="description" onchange="habilitarBtn()" required></label>
-                        <label class="formLabel" for="price">Ingrese el precio del producto: <input id="price" type="number" name="price" onchange="habilitarBtn()" required></label>
-                        <label class="formLabel" for="stock">Ingrese el stock del producto: <input id="stock" type="number" name="stock" onchange="habilitarBtn()" required></label>
-                        <label class="formLabel" for="category">Ingrese la categoria del producto: <input id="category" type="text" name="category" onchange="habilitarBtn()" required></label>
-                        <label class="formLabel" for="photo">Ingrese la URL con la imagen del producto: <input id="photo" type="text" name="photo" onchange="habilitarBtn()" required></label>
+                        <label class="formLabel" for="title">Ingrese el nombre del producto: <input id="title" class="formInput" type="text" name="title" onchange="habilitarBtn()" required></label>
+                        <label class="formLabel" for="description">Ingrese la descripción del producto: <input id="description" class="formInput" type="text" name="description" onchange="habilitarBtn()" required></label>
+                        <label class="formLabel" for="price">Ingrese el precio del producto: <input id="price" class="formInput" type="number" name="price" onchange="habilitarBtn()" required></label>
+                        <label class="formLabel" for="stock">Ingrese el stock del producto: <input id="stock" class="formInput" type="number" name="stock" onchange="habilitarBtn()" required></label>
+                        <label class="formLabel" for="category">Ingrese la categoria del producto: <input id="category" class="formInput" type="text" name="category" onchange="habilitarBtn()" required></label>
+                        <label class="formLabel" for="photo">Ingrese la URL con la imagen del producto: <input id="photo" class="formInput" type="text" name="photo" onchange="habilitarBtn()" required></label>
                     </div>
                     <button class="formBtn" id="btnNewProduct" disabled>Enviar</button>
                 </form>
                 <button id="btnAddProduct" onclick=fadeToggleForm()>Agregar producto</button>
-                <!-- <a href="btnAddProduct">Agregar producto</a> -->
             <% } %>
         <%}%>
+            <div id="productFilters">
+                <label for="order">
+                    Ordenar Productos:
+                    <select name="order" id="selectProductsOrder" onchange=changeArrayOrder()>
+                        <option value=0>---</option>
+                        <option value=1>A-Z</option>
+                        <option value=2>Z-A</option>
+                        <option value=3>Menor precio</option>
+                        <option value=4>Mayor precio</option>
+                        <option value=5>Por categoria A-Z</option>
+                        <option value=6>Por categoria Z-A</option>
+                        <option value=7>Menor Stock</option>
+                        <option value=8>Mayor Stock</option>
+                    </select>
+                </label>
+                <label for="filter">
+                    Filtrar Productos por categorias:
+                    <select name="filter" id="selectProductsFilter" onchange=changeArrayFilter()>
+
+                    </select>
+                </label>
+            </div>
             
             <div class="productsListContainer">
-                <% productsList.forEach((product) => { %>
-                    <div class="producto" id="producto-<%= product.code %>">
-                        <div class="imgContainer">
-                            <img src="<%= product.photo %>" alt='imagen de producto' class="productoImagen">
-                        </div>
-                        <div class="productoTextos">
-                            <p class="productoTitulo"><%= product.title %></p>
-                            <p class="productoDescription"><%= product.description %></p>
-                            <div class="subcontenedorProducto">
-                                <p class="productoStock">Stock: <%= product.stock %> unidades</p>
-                                <p class="productoPrecio">$ <%= product.price %></p>
-                            </div>
-                            <% if (usuario && usuario.admin === true){%>    
-                                <button class="" onclick="location.href='/api/products/<%= product.id %>'">
-                                <form action="/api/products/eliminar/<%= product.id %>" method="POST" class="deleteProductForm" >
-                                    <input type="button" value="Eliminar" onclick="deleteProduct(this)">
-                                    <input type="hidden" name="_method" value="DELETE">
-                                </form>
-                            <% } %>
 
-                        </div>
-                    </div>
-                <% }) %>
             </div>
     </div>
-
     <script>
+        const productsList = <%- JSON.stringify(productsList) %>;
+        let productsArray;
+        const productsListContainer = document.getElementsByClassName('productsListContainer')[0]
         const btnAddNewProduct = document.getElementById('btnNewProduct');
-        // const btnDelete = document.getElementById('btnDeleteProduct');
+        const newProductForm = document.getElementById('formAddProduct');
+        const toggleBtn = document.getElementById('btnAddProduct')
+        const selectProductsOrder = document.getElementById('selectProductsOrder')
+
         
+        //FUNCIONES
+
+        //funcion para generar el html de la lista de productos
+        function crearHtmlProductsList (array){
+            let html = '';
+            array.map(prod => {
+            html += `<div class="producto" id="producto-${prod.id}">
+                        <div class="imgContainer">
+                            <img src="${prod.photo}" alt='imagen de producto id ${prod.id}' class="productoImagen">
+                        </div>
+                        <div class="productoTextos">
+                            <p class="productoTitulo">${prod.title}</p>
+                            <p class="productoDescription">${prod.description}</p>
+                            <div class="subcontenedorProducto">
+                                <p class="productoStock">Stock: ${prod.stock} unidades</p>
+                                <p class="productoPrecio">$ ${prod.price}</p>
+                                <a class="verProductoLink" href="/api/products/${prod.id}">Ver producto</a>
+                            </div>
+                            <% if (usuario && usuario.admin === true){%>   
+                                <div class="contenedorBtnAdmin">
+                                    <button class="btnEditProduct" onclick="location.href='/api/products/editar/${prod.id}'">Editar</button>
+                                    <form action="/api/products/eliminar/${prod.id}" method="POST" class="deleteProductForm" >
+                                        <input class='btnDeleteProduct' type="button" value="Eliminar" onclick="deleteProduct(this)">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                    </form>
+                                </div> 
+                            <% } %>
+                            </div>
+                            </div>`
+                        })
+                        return html
+                    }
+                    
+        // Funcion par habilitar el boton del formulario una vez que tenga todos los datos completados
         function habilitarBtn() {
             const title = document.getElementById('title').value;
             const description = document.getElementById('description').value;
@@ -119,14 +163,13 @@
             }
         }
 
+        // Eliminar producto
         function deleteProduct(input){
             const deleteOk = confirm('¿Estás seguro de eliminar el producto?')
             return (deleteOk) ? input.parentNode.submit() : false
         }
 
-        const newProductForm = document.getElementById('formAddProduct');
-        const toggleBtn = document.getElementById('btnAddProduct')
-
+        //Funcion para aparecer y desaparecer el formulario para cargar un producto
         function fadeToggleForm(){
             newProductForm.classList.toggle('fade-in')
             if(newProductForm.classList.contains('fade-in')){
@@ -134,8 +177,158 @@
             }else{
                 toggleBtn.innerHTML = 'Agregar Producto'
             }
-            console.log('probando');
         }
+
+        //Funcion para ordenar el array de productos
+
+        function changeArrayOrder(){
+
+            let newArray;
+            const option = document.getElementById('selectProductsOrder')
+            if (option.value == 1){
+                newArray = productsList.sort( (a,b) => {
+                    if(a.title > b.title){
+                        return 1
+                    }
+                    if(a.title < b.title){
+                        return -1
+                    }
+                    return 0
+                } )
+            }
+            if (option.value == 2){
+                newArray = productsList.sort( (a,b) => {
+                    if(a.title < b.title){
+                        return 1
+                    }
+                    if(a.title > b.title){
+                        return -1
+                    }
+                    return 0
+                } )
+            }
+            if (option.value == 3){
+                newArray = productsList.sort( (a,b) => {
+                    if(a.price > b.price){
+                        return 1
+                    }
+                    if(a.price < b.price){
+                        return -1
+                    }
+                    return 0
+                } )
+            }
+            if (option.value == 4){
+                newArray = productsList.sort( (a,b) => {
+                    if(a.price < b.price){
+                        return 1
+                    }
+                    if(a.price > b.price){
+                        return -1
+                    }
+                    return 0
+                } )
+            }
+            if (option.value == 5){
+                newArray = productsList.sort( (a,b) => {
+                    if(a.category > b.category){
+                        return 1
+                    }
+                    if(a.category < b.category){
+                        return -1
+                    }
+                    return 0
+                } )
+            }
+            if (option.value == 6){
+                newArray = productsList.sort( (a,b) => {
+                    if(a.category < b.category){
+                        return 1
+                    }
+                    if(a.category > b.category){
+                        return -1
+                    }
+                    return 0
+                } )
+            }
+            if (option.value == 7){
+                newArray = productsList.sort( (a,b) => {
+                    if(a.stock > b.stock){
+                        return 1
+                    }
+                    if(a.stock < b.stock){
+                        return -1
+                    }
+                    return 0
+                } )
+            }
+            if (option.value == 8){
+                newArray = productsList.sort( (a,b) => {
+                    if(a.stock < b.stock){
+                        return 1
+                    }
+                    if(a.stock > b.stock){
+                        return -1
+                    }
+                    return 0
+                } )
+            }
+            if (option.value == 0 || !option.value){
+                newArray = productsList.sort( (a,b) => {
+                    if(a.timestamp > b.timestamp){
+                        return 1
+                    }
+                    if(a.timestamp < b.timestamp){
+                        return -1
+                    }
+                    return 0
+                } )
+            }
+            productsArray = newArray;
+            let html = crearHtmlProductsList(productsArray)
+            productsListContainer.innerHTML= html;
+        }
+        // Funcion para obtener todas las categorias 
+        function categories( arr ){
+            const categories = []
+
+            arr.forEach( prod => {
+                categories.push( prod.category.toLowerCase().replace(/ /g, "") )
+            } )
+            let unique = [...new Set(categories)]
+            return unique
+        }
+        let categorias = categories(productsList);
+
+        // Funcion para filrar por categoria
+
+        function setFilterHtml(array){
+            let html = `<option value="0">Todos los productos</option>`
+            array.map(arr => {
+                html += `<option value="${arr}">${arr}</option>`
+            })
+            document.getElementById('selectProductsFilter').innerHTML = html;
+        }
+        setFilterHtml(categorias)
+
+        // filtrar array
+        function changeArrayFilter(){
+            let newArray;
+            const option = document.getElementById('selectProductsFilter').value
+            if (option == 0 || !option ){
+                productsArray = productsList
+            }else{
+                newArray = productsList.filter((prod) => prod.category.toLowerCase().replace(/ /g, "") == option);
+                productsArray = newArray;
+            }
+            let html = crearHtmlProductsList(productsArray)
+            productsListContainer.innerHTML= html;  
+        }
+
+        //cargamos el html al iniciar la web
+        let html = crearHtmlProductsList(productsList)
+        productsListContainer.innerHTML= html;
+
     </script>
 
 </body>

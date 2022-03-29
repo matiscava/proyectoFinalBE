@@ -20,9 +20,21 @@
     <button class="btnHome" onclick="location.href='/api/products'">
       Ir a productos
     </button>
-    <button class="btnHome" onclick="location.href='/api/carts'">
-      Ver carritos creados
-    </button>
+    <% if (usuario.cart) {%>
+      <button class="btnHome" onclick="location.href='/api/carts/<%= usuario.cart %>/products'">
+          ir al carrito <%= usuario.cart %> 
+      </button>   
+    <% } else { %>  
+      <button class="btnHome" onclick="location.href='/api/carts'">
+          Ver carritos creados
+      </button>
+      <button class="btnHome" onclick="location.href='/api/users/login'">
+        crear un Carrito
+      </button>
+    <% } %> 
+    <button class="btnHome" onclick="location.href='/api/chat'">
+      Ir al chat
+     </button>    
   </div>
   <h2 class="titulo">Datos de Usuario ID: <%=usuario.id%></h2>
   <div class="userInfoContainer">
@@ -35,7 +47,20 @@
       <p class="userText">Apellido: <%=usuario.lastname%></p>
       <p class="userText">Mail: <%=usuario.email%></p>
       <p class="userText">Telefono de Contacto: <%=usuario.phone%></p>
+      <p class="userText">Compras Realizadas: <%if(!orders.length){ %> No realizó ninguna compra en nuestro Sitio <% }else{ %> Realizó compras en nuestro Sitio <% } %> </p>
     </div>
   </div>
+  <%if(orders.length){ %>
+    <div class="orderContainer">
+    <% orders.forEach( (order) => { %>
+      <div id="orderId-<%= order.id %>">
+        <p class="orederText">Número de Orden: <%= order.orderNumber %></p>
+        <p class="orederText">Emición de la Orden: <%= order.timestamp %> </p>
+        <p class="orederText">Valor de la Orden: $ <%= order.price %> </p>
+        <button class="btnOrder" onclick="location.href='/api/order/<%= order.id %>'">Ver Detalle de la Orden</button>
+      </div>
+    <% }) %>
+    </div>
+  <% } %>
 </body>
 </html>

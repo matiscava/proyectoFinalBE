@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%=product.title%></title>
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body>  
+    <% if (!usuario){%>
+        <div class="unlogContainer">
+            <h1> Usted no se ha logueado </h1>
+            <div class="btnContainer">
+                <button class="btnHome" onclick="location.href='/api/users/login'">
+                    Loguearse
+                </button>
+                
+                <button class="btnHome" onclick="location.href='/api/users/signup'">
+                    Registrarse
+                </button>
+                <button class="btnHome" onclick="location.href='/api/products'">
+                  Ir a productos
+                </button>
+                <button class="btnHome" onclick="location.href='/api/carts'">
+                    Ver carritos creados
+                </button>
+                <button class="btnHome" onclick="location.href='/api/carts'">
+                  Ver carritos creados
+                </button>
+                <form action="/api/carts" method="post" id="containerCreateCart" autocomplete="off">
+                  <button class="btnHome" id="btnnewCart">Crear carrito</button>            
+                </form>
+                <button class="btnHome" onclick="location.href='/api/chat'">
+                    Ir al chat
+                </button>  
+            </div>
+        </div>
+    <%} else {%>
+        <div class="logContainer">
+            <h1>
+              Bienvenide, <%= usuario.email %>
+            </h1>
+                    <button class="btnHome" onclick="location.href='/api/users/logout'">
+                      Desloguear
+                    </button>
+                    <button class="btnHome" onclick="location.href='/api/products'">
+                      Ir a productos
+                    </button>
+                    <% if (usuario.cart) {%>
+                        <button class="btnHome" onclick="location.href='/api/carts/<%= usuario.cart %>/products'">
+                            ir al carrito <%= usuario.cart %> 
+                        </button>   
+                    <% } else { %>  
+                    <button class="btnHome" onclick="location.href='/api/carts'">
+                        Ver carritos creados
+                    </button>
+                    <form action="/api/carts" method="post" id="containerCreateCart" autocomplete="off">
+                        <button class="btnHome" id="btnnewCart">Crear carrito</button>            
+                    </form>
+                    <% } %> 
+                    <button class="btnHome" onclick="location.href='/api/chat'">
+                        Ir al chat
+                    </button>  
+                    <button class="btnHome" onclick="location.href='/api/users/info'">
+                        Información del usuario
+                    </button>
+        </div>  
+    <%}%>
+
+        <div class="productViewContainer">
+          <div id="productViewImgContainer"><img src="<%= product.photo %>" id="productViewImg" alt="Imgen de <%= product.title %>"></div>
+          <div>
+            <p><%= product.title %></p>
+            <p><%= product.description %></p>
+            <p>$ <%= product.price %></p>
+            <p>Stock: <%= product.title %></p>
+            <p>ID: <%= product.id %></p>
+            <p>Categoria: <%= product.category %> </p>
+            <% if (usuario && usuario.admin === true){%>   
+                <div class="contenedorBtnAdmin">
+                    <button class="btnEditProduct" onclick="location.href='/api/products/editar/<%= product.id %>'">Editar</button>
+                    <form action="/api/products/eliminar/<%= product.id %>" method="POST" class="deleteProductForm" >
+                        <input class='btnDeleteProduct' type="button" value="Eliminar" onclick="deleteProduct(this)">
+                        <input type="hidden" name="_method" value="DELETE">
+                    </form>
+                </div> 
+            <% } %>
+          </div>
+        </div>
+
+        <script>
+          function deleteProduct(input){
+            const deleteOk = confirm('¿Estás seguro de eliminar el producto?')
+            return (deleteOk) ? input.parentNode.submit() : false
+        }
+        </script>
+  
+</body>
+</html>

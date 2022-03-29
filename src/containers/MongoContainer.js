@@ -50,7 +50,6 @@ class MongoContainer {
 
   async createProduct(producto) {
     try {
-      console.log('createProduct', producto);
       const date = new Date().toLocaleString();
       let agregarData={...producto, timestamp:date}
 
@@ -211,7 +210,6 @@ class MongoContainer {
       const productsList = cart[0].products;
       const newProductList = productsList.find(prod => prod.id == productoId)
       const data = {timestamp:date,products: newProductList}
-      console.log(data);
       await this.collection.updateOne({ _id: carritoId },{$pull: {products: newProductList}});
       await this.collection.updateOne({ _id: carritoId },{$set: {timestamp:date}});      
       return true
@@ -323,6 +321,34 @@ class MongoContainer {
      console.log(`Se ha modificado el producto id: ${newStock[i].id}`);
     }
     }catch(err){logger.error(`Error: ${err}`)}
+  }
+  //chat
+  async sendMessage ( message ){
+    try{
+
+      const document = await new this.collection(message);
+      const response = await document.save()
+
+      logger.info('create new product: ', {response});
+      return document._id; 
+    }catch(err){
+      logger.error(`Error: ${err}`)
+    }
+  }
+
+  async getMessageByEmail (email) {
+    try {
+      let documents = await this.collection.find({ 'email': email },{__v:0})
+      if (documents.length === 0) {
+        return null;
+      } else {
+        documents = documents.map(asPOJO);
+        documents = documents.map( doc => renameField(doc, '_id' , 'id'))
+        return documents;
+      }
+    } catch (error) {
+      logger.error('Error:', error);
+    }
   }
 }
 

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Listado de Chats de <%= usuario.username %> </title>
+  <link rel="stylesheet" href="/css/estilos.css">
+
+</head>
+<body>
+  <% if (!usuario){%>
+    <div class="unlogContainer">
+        <h1> Usted no se ha logueado </h1>
+        <div class="btnContainer">
+            <button class="btnHome" onclick="location.href='/api/users/login'">
+                Loguearse
+            </button>
+            <button class="btnHome" onclick="location.href='/api/users/signup'">
+                Registrarse
+            </button>
+            <button class="btnHome" onclick="location.href='/api/products'">
+                Ir a productos
+            </button>
+            <form action="/api/carts" method="post" id="containerCreateCart" autocomplete="off">
+                <button class="btnHome" id="btnnewCart">Crear carrito</button>            
+            </form>    
+            <button class="btnHome" onclick="location.href='/api/chat'">
+              Ir al chat
+            </button>                
+        </div>
+    </div>
+<%} else {%>
+    <div class="logContainer">
+        <h1>
+            Bienvenide, <%= usuario.username %>
+        </h1>
+        <button class="btnHome" onclick="location.href='/api/users/logout'">
+            Desloguear
+        </button>
+        <button class="btnHome" onclick="location.href='/api/products'">
+            Ir a productos
+        </button>
+        <% if (usuario.cart) {%>
+            <button class="btnHome" onclick="location.href='/api/carts/<%= usuario.cart %>/products'">
+                ir al carrito <%= usuario.cart %> 
+            </button>   
+        <% } else { %>  
+            <button class="btnHome" onclick="location.href='/api/carts'">
+                Ver carritos creados
+            </button>
+            <form action="/api/carts" method="post" id="containerCreateCart" autocomplete="off">
+                <button class="btnHome" id="btnnewCart">Crear carrito</button>            
+            </form>
+        <% } %> 
+        <button class="btnHome" onclick="location.href='/api/chat'">
+          Ir al chat
+        </button> 
+        <button class="btnHome" onclick="location.href='/api/users/info'">
+            Información del usuario
+        </button>    
+    </div>      
+<%}%>
+
+<div class="userMessages">
+  <% if (emailList) { %>
+    <h2 class="titulo">Listado de Mensajes de <%= usuario.username %>:</h2>
+    <% emailList.forEach( (message) => { %>
+      <div class='mensaje' id='mensaje-<%= message.id %>'>
+        <p class='mensajetext mensajetext--user'><%= message.email %></p>
+        <p class='mensajetext mensajetext--date'>[<%= message.timestamp %>]: </p>
+        <p class='mensajetext mensajetext--message'><%= message.message %></p>
+      </div>
+    <%})%>
+  <% }else{ %> 
+    <p class="chatConteinerText">No a enviado mensajes en nuestro Chat</p>
+  <%}%>
+
+</div>
+</body>
+</html>

@@ -61,20 +61,43 @@ body {
 /*ADD PRODUCT FORM*/
 
 #formAddProduct {
-  display: none;
   height: 0;
   overflow: hidden;
-  opacity: 0;
+  box-shadow: inset 0 0 13px 10px #9da5ad;
   transition: 0.5s ease-out;
 }
 #formAddProduct.fade-in {
-  display: block;
-  opacity: inherit;
-  height: max-content;
+  height: 100%;
+  border: 2px solid #c1a0a0;
+  padding: 20px 10px;
+}
+.formLabel,
+.formInput {
+  font-size: 0;
+  padding: 0;
+  transition: 0.5s;
 }
 
-.formAddProduct:not(.fade-in) {
-  display: none;
+#formAddProduct.fade-in .formLabel {
+  font-size: 16px;
+}
+#formAddProduct.fade-in .formInput {
+  font-size: 14px;
+}
+
+#btnAddProduct {
+  display: block;
+  margin: 0 auto;
+  border: none;
+  background-color: unset;
+  color: #277ec9;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: 0.4s;
+}
+#btnAddProduct:hover {
+  color: #4c9171;
+  text-shadow: 1px 0px 2px #449f39;
 }
 
 /* FAIL LOGIN */
@@ -128,7 +151,13 @@ body {
 
 .btnContainer {
   margin-left: auto;
+  display: flex;
 }
+
+#containerCreateCart {
+  margin: 0;
+}
+
 .btnHome {
   padding: 8px 20px;
   margin: 0 10px;
@@ -169,6 +198,8 @@ body {
   align-self: center;
   justify-content: center;
   margin: 10px;
+  overflow: hidden;
+  background-color: white;
 }
 .productoTextos {
   width: calc(100% - 200px);
@@ -177,8 +208,8 @@ body {
   margin: 10px;
 }
 .productoImagen {
-  width: 100%;
-  height: auto;
+  max-width: 100%;
+  max-height: 100%;
   margin: 0px;
 }
 .productoTitulo {
@@ -197,6 +228,7 @@ body {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
   margin: 0;
   margin-top: auto;
 }
@@ -210,6 +242,67 @@ body {
   font-size: 18px;
   margin: 0;
   margin-top: auto;
+}
+
+.verProductoLink {
+  color: white;
+  text-decoration: none;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: 700;
+  margin: 0%;
+  transition: 0.5s;
+}
+
+.verProductoLink:hover {
+  color: #8ac1db;
+}
+
+.contenedorBtnAdmin {
+  display: flex;
+  flex-direction: row;
+  margin: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+.deleteProductForm {
+  width: fit-content;
+  height: fit-content;
+  margin: 0;
+}
+
+.btnEditProduct {
+  width: fit-content;
+  background-color: beige;
+  color: #1b51a3;
+  padding: 10px 26px;
+  border: 2px solid #1b51a3;
+  border-radius: 20px;
+  font-size: 16px;
+  transition: 0.5s;
+  cursor: pointer;
+}
+.btnEditProduct:hover {
+  color: beige;
+  background-color: #1b51a3;
+  border-color: beige;
+  box-shadow: 0 0 16px 3px #2f66bb;
+}
+.btnDeleteProduct {
+  background-color: beige;
+  color: #861f1c;
+  padding: 10px 26px;
+  border: 2px solid #861f1c;
+  border-radius: 20px;
+  font-size: 16px;
+  transition: 0.5s;
+  cursor: pointer;
+}
+.btnDeleteProduct:hover {
+  color: beige;
+  background-color: #861f1c;
+  border-color: beige;
+  box-shadow: 0 0 16px 3px #861f1c;
 }
 /*CartView*/
 
@@ -233,10 +326,12 @@ body {
   align-self: center;
   justify-content: center;
   margin: 5px;
+  overflow: hidden;
+  background-color: white;
 }
 .cartProductImage {
-  width: 100%;
-  height: auto;
+  max-width: 100%;
+  max-height: 100%;
   margin: 0px;
 }
 .cartProducts {
@@ -389,4 +484,101 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+/* PRODUCT VIEW */
+
+.productViewContainer {
+  margin: 20px auto;
+  background-color: rgb(224, 214, 214);
+  padding: 5px;
+  display: flex;
+  flex-direction: row;
+}
+#productViewImgContainer {
+  width: 400px;
+  height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background-color: white;
+}
+#productViewImg {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* CHAT */
+
+.chatLoggin {
+  margin: 10px 20px;
+  padding: 25px;
+  border: 2px black solid;
+  box-shadow: inset 0 0 10px black;
+  background-color: whitesmoke;
+}
+.chatConteinerText {
+  font-size: 16px;
+  color: #49504a;
+  font-family: sans-serif;
+}
+.chatConatiner {
+  margin: 0;
+  display: block;
+  padding: 20px;
+}
+
+.chatList {
+  height: 500px;
+  max-height: 100vh;
+  margin-bottom: 0;
+  background-color: white;
+  overflow: hidden;
+  overflow-y: scroll;
+  border: 1px solid #0000007a;
+  box-shadow: inset 0px -5px 20px 6px #00000040;
+  padding: 14px;
+}
+#chat-form,
+#chatInputMessage,
+#btnSendMessage {
+  margin: 0;
+}
+#chat-form {
+  margin-left: 20px;
+  margin-right: 20px;
+  font-size: 0;
+  box-sizing: content-box;
+}
+#chatInputMessage {
+  border: 0;
+  padding: 0.5rem;
+  width: 90%;
+}
+#btnSendMessage {
+  background-color: #80bd01;
+  border: none;
+  padding: 0.5rem;
+  width: 9%;
+  box-sizing: border-box;
+}
+.mensaje {
+  margin: 10px;
+  margin-bottom: 20px;
+}
+.mensajetext {
+  display: inline-block;
+  margin: 0;
+}
+.mensajetext--user {
+  color: blue;
+  font-weight: 600;
+}
+.mensajetext--date {
+  color: brown;
+}
+.mensajetext--message {
+  color: green;
+  font-style: italic;
 }

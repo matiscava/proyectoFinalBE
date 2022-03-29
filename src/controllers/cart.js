@@ -177,7 +177,7 @@ const mekeTicket = async ( req , res ) => {
 
   const cartList = {cart: carritoElegido}
   
-  let ticketCompra = {...usuario,...cartList};
+  let ticketCompra = {...usuario,...cartList,price: precioFinal};
   let htmlItems = '';
   const ticketId = await ticketsDao.createTicket(ticketCompra)
 
