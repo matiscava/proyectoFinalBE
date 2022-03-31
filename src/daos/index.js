@@ -1,19 +1,19 @@
-import ProductDaoFile from './products/ProductDaoFile.js';
-import CartDaoFile from './carts/CartDaoFile.js';
-import UserDaoFile from './users/UserDaoFile.js';
-import TicketsDaoFile from './tickets/TicketDaoFile.js';
+import ProductDaoFile from './products/productDaoFile.js';
+import CartDaoFile from './carts/cartDaoFile.js';
+import UserDaoFile from './users/userDaoFile.js';
+import TicketsDaoFile from './tickets/ticketDaoFile.js';
 import ChatDaoFile from './chats/chatDaoFile.js';
 
-import ProductDaoMongo from './products/ProductDaoMongo.js';
-import CartDaoMongo from './carts/CartDaoMongo.js';
-import UserDaoMongo from './users/UserDaoMongo.js';
-import TicketsDaoMongo from './tickets/TicketDaoMongo.js';
+import ProductDaoMongo from './products/productDaoMongo.js';
+import CartDaoMongo from './carts/cartDaoMongo.js';
+import UserDaoMongo from './users/userDaoMongo.js';
+import TicketsDaoMongo from './tickets/ticketDaoMongo.js';
 import ChatDaoMongo from './chats/chatDaoMongo.js';
 
-import ProductDaoMemory from './products/ProductDaoMemory.js';
-import CartDaoMemory from './carts/CartDaoMemory.js';
-import UserDaoMemory from './users/UserDaoMemory.js';
-import TicketsDaoMemory from './tickets/TicketDaoMemory.js';
+import ProductDaoMemory from './products/productDaoMemory.js';
+import CartDaoMemory from './carts/cartDaoMemory.js';
+import UserDaoMemory from './users/userDaoMemory.js';
+import TicketsDaoMemory from './tickets/ticketDaoMemory.js';
 import ChatDaoMemory from './chats/chatDaoMemory.js';
 
 class PersistenceFactory {
