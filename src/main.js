@@ -45,6 +45,7 @@ io.on('connection', async (socket) =>{
 const PORT = parseInt( process.env.PORT) || 8080;
 
 const server = httpServer.listen(PORT, () => {
+    console.log('probando Heroku');
     logger.info(`Servidor http escuchando en el puerto http://localhost:${server.address().port}`)
 })
 server.on('error', error => logger.error(`Error en servidor ${error}`))
