@@ -69,7 +69,7 @@
               </div>
               <form action="/api/carts/<%= cartID %>/products" method="post" class="productCartForm">
                 <input type="text" name="id" id="id" value="<%=product.id%>" style="display: none;">
-                <label for="quantity" class="cartLabel">Cantidad: <input class="inputQuantity" type="number" name="quantity" id="quantity" min="0" max="<%= product.stock %>" ></label>
+                <label for="quantity" class="cartLabel">Cantidad: <input class="inputQuantity" value=0 type="number" name="quantity" id="quantity" min="0" max="<%= product.stock %>" ></label>
                 <button>Agregar al carrito</button>
               </form>
             </div>

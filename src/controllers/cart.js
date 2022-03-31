@@ -72,18 +72,10 @@ const addProductToCart = async (req,res) => {
   }
       
     const carritoActualizado = await cartsDao.getCart(carritoID);
-  if(error.length!==0){
-      logger.info({
-          message: 'Se ha modificado el carrito',
-          data: carritoActualizado,
-          error: error
-      })
-  }else{
-      logger.info({
-          message: 'Se ha modificado el carrito',
-          data: carritoActualizado
-      })
-  }
+    logger.info({
+        message: 'Se ha modificado el carrito',
+        data: carritoActualizado
+    })
   res.redirect(`/api/carts/${carritoID}/products`)
   }
 

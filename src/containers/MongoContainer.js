@@ -72,15 +72,6 @@ class MongoContainer {
     };
   }
 
-  async deleteAll() {
-    try {
-      await this.collection.deleteMany({});
-      logger.warn('deleteAll: ');
-    } catch (error) {
-      logger.error('Error:', error);
-    };
-  }
-
   async update(id, element) {
     const date = new Date().toLocaleString();
     const newInfo = {...element,timestamp:date};
@@ -115,7 +106,7 @@ class MongoContainer {
 
   async addCartToUser(userID,cartID) {
     try{
-      const user = this.getById(userID);
+      const user = await this.getById(userID);
       const date = new Date().toLocaleString();
 
       if(user.cart){
@@ -291,8 +282,8 @@ class MongoContainer {
         timestamp: date,
         userId:ticketCompra.id,
         cart:ticketCompra.cart,
+        price: ticketCompra.price
       }
-      logger.info(newTicket);
       const document = await new this.collection(newTicket);
       const response = await document.save()
       logger.info('Ticket creado', response);
@@ -329,7 +320,7 @@ class MongoContainer {
       const document = await new this.collection(message);
       const response = await document.save()
 
-      logger.info('create new product: ', {response});
+      logger.info('create new message: ', {response});
       return document._id; 
     }catch(err){
       logger.error(`Error: ${err}`)

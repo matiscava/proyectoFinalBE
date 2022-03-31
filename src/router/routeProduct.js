@@ -18,6 +18,11 @@ productsRouter.delete('/eliminar/:id', productController.deleteProduct)
 //MUESTRA UN PRODUCTO ESPECIFICO
 
 productsRouter.get('/:id', productController.getProduct );
+productsRouter.post('/:id', productController.addProductToCart );
+
+//MUESTRA UN PRODUCTO ESPECIFICO
+
+productsRouter.get('/category/:category', productController.getCategory );
 
 //MODIFICA UN PRODUCTO ESPECIFICO
 

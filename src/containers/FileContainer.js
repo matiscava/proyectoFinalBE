@@ -1,6 +1,7 @@
 import fs from 'fs';
 import logger from './../logger/index.js';
-import options from '../config.js';
+import crypto from 'crypto';
+
 
 export default class FileContainer {
     constructor ( archivo ) {
@@ -19,7 +20,7 @@ export default class FileContainer {
     async getById (idNum) {
         try{
             const objeto = await this.getAll()
-            const objetoFiltrado = objeto.filter(obj => obj.id === parseInt(idNum));
+            const objetoFiltrado = objeto.filter(obj => obj.id === idNum);
             if (objetoFiltrado[0]===undefined) {
                 return null;
             }else{
@@ -34,22 +35,13 @@ export default class FileContainer {
         try{
             const objeto = await this.getAll();
             const date = new Date().toLocaleString();
-            let nextID = 1
-            let agregarData;
-            if(objeto.length===0){
-                agregarData= {...objetoNuevo, id: nextID, timestamp: date}
-            }else{
-                for (let i=0;i<objeto.length ;i++) {
-                    while( objeto[i].id >= nextID ){
-                        nextID++;
-                    }
-                }
-                agregarData= {...objetoNuevo, id: nextID, timestamp: date}
-            }
+            const id = crypto.randomBytes(10).toString('hex');
+            let agregarData= {...objetoNuevo, id: id, timestamp: date}
+
             objeto.push(agregarData);
             const dataToJSON = JSON.stringify(objeto,null,2);
             fs.writeFileSync(`${this.archivo}` , dataToJSON);
-            return agregarData;
+            return id;
         } catch (error) {
             logger.error('Error: ', error);
             throw error;
@@ -59,18 +51,9 @@ export default class FileContainer {
     async deleteById(idNum){
         try{
             const objeto = await this.getAll();
-            const objetoFiltrado = objeto.filter(obj => obj.id !== parseInt(idNum));
+            const objetoFiltrado = objeto.filter(obj => obj.id !== idNum);
             const dataToJSON = JSON.stringify(objetoFiltrado,null,2);
             fs.writeFileSync(`${this.archivo}` , dataToJSON);
-        } catch (error) {
-            logger.error('Error: ', error);
-            throw error;
-        }
-    }
-
-    async daleteAll(){
-        try{
-            fs.writeFileSync(`${this.archivo}` , '[]');
         } catch (error) {
             logger.error('Error: ', error);
             throw error;
@@ -81,8 +64,8 @@ export default class FileContainer {
         try{
             const data = await fs.promises.readFile(this.archivo, 'utf-8');
             const lista = JSON.parse(data);
-            const elementoGuardado = lista.find((obj)=> obj.id === parseInt(id))
-            const elementoIndex = lista.findIndex((obj)=> obj.id === parseInt(id))
+            const elementoGuardado = lista.find((obj)=> obj.id === id)
+            const elementoIndex = lista.findIndex((obj)=> obj.id === id)
             if (!elementoGuardado){
                 logger.error(`El elemento con el id: ${id}, no existe`);
                 return null;
@@ -101,27 +84,20 @@ export default class FileContainer {
             throw error;
         }
     }
+
     async newCart(){
         try{
             const data = await fs.promises.readFile(this.archivo, 'utf-8');
             const objeto = JSON.parse(data);
-            let nextID = 1;
-            let carritoNuevo;
+            const id = crypto.randomBytes(10).toString('hex');
             const date = new Date().toLocaleString();
-            if(objeto.length===0){
-                carritoNuevo={id: nextID, timestamp: date, products:[] }
-            }else{
-                for (let i=0;i<objeto.length ;i++) {
-                    while( objeto[i].id >= nextID ){
-                        nextID++;
-                    }
-                }
-                carritoNuevo={id: nextID, timestamp: date, products:[]}
-            }
+
+            let carritoNuevo={id: id, timestamp: date, products:[] }
+
             objeto.push(carritoNuevo);
             const dataToJSON = JSON.stringify(objeto,null,2);
             fs.writeFileSync(`${this.archivo}` , dataToJSON);
-            return nextID;
+            return id;
         } catch (error) {
             logger.error('Error: ', error);
             throw error;
@@ -136,7 +112,7 @@ export default class FileContainer {
             const data = await fs.promises.readFile(this.archivo, 'utf-8');
             const lista = JSON.parse(data);
            
-            const elementoIndex = lista.findIndex((obj)=> obj.id === parseInt(userID))
+            const elementoIndex = lista.findIndex((obj)=> obj.id === userID)
            
             if(user.cart){
                 return null
@@ -163,8 +139,8 @@ export default class FileContainer {
 
             const elemento = {adress: userAdress, email: userEmail,timestamp:date}
             
-            const elementoGuardado = lista.find((obj)=> obj.id === parseInt(cartID))
-            const elementoIndex = lista.findIndex((obj)=> obj.id === parseInt(cartID))
+            const elementoGuardado = lista.find((obj)=> obj.id === cartID)
+            const elementoIndex = lista.findIndex((obj)=> obj.id === cartID)
             if (!elementoGuardado){
                 logger.error(`El elemento con el id: ${id}, no existe`);
                 return null;
@@ -207,7 +183,7 @@ export default class FileContainer {
         try {
             const data = await fs.promises.readFile(this.archivo, 'utf-8');
             const carrito = JSON.parse(data);
-            const carritoElegido = carrito.find( (carro) => carro.id === parseInt(carritoId) );
+            const carritoElegido = carrito.find( (carro) => carro.id === carritoId );
             const date = new Date().toLocaleString();
             carritoElegido.timestamp = date;
             carritoElegido.products = producto;
@@ -223,7 +199,7 @@ export default class FileContainer {
         try{
             const data = await fs.promises.readFile(this.archivo, 'utf-8');
             const cartList = JSON.parse(data);
-            const carritoElegido = cartList.find( (carro) => carro.id === parseInt(carritoId) );
+            const carritoElegido = cartList.find( (carro) => carro.id === carritoId );
 
             return carritoElegido;
         } catch (error) {
@@ -236,7 +212,7 @@ export default class FileContainer {
         try{
             const data = await fs.promises.readFile(this.archivo, 'utf-8');
             const carrito = JSON.parse(data);
-            const carritoFiltrado = carrito.filter( (carro) => carro.id !== parseInt(carritoId));
+            const carritoFiltrado = carrito.filter( (carro) => carro.id !== carritoId );
             const dataToJSON = JSON.stringify(carritoFiltrado,null,2);
             fs.writeFileSync(`${this.archivo}` , dataToJSON);
         } catch (error) {
@@ -249,15 +225,15 @@ export default class FileContainer {
         try{
             const data = await fs.promises.readFile(this.archivo, 'utf-8');
             const carrito = JSON.parse(data);
-            const carritoElegido = carrito.find( (carro) => carro.id === parseInt(carritoId) );
+            const carritoElegido = carrito.find( (carro) => carro.id === carritoId );
             const date = new Date().toLocaleString();
         
             carritoElegido.timestamp = date;
-            const carritoElegidoIndex = carrito.findIndex((carro) => carro.id === parseInt(carritoId));
+            const carritoElegidoIndex = carrito.findIndex((carro) => carro.id === carritoId);
             const productosCarrito = carritoElegido.products;
-            const producto = productosCarrito.find((carro) => carro.id === parseInt(productoId))
+            const producto = productosCarrito.find((carro) => carro.id === productoId)
             if(producto!==undefined){
-                const carritoFiltrado = productosCarrito.filter( (carro) => carro.id !== parseInt(productoId));
+                const carritoFiltrado = productosCarrito.filter( (carro) => carro.id !== productoId);
                 carritoElegido.products.splice(0,productosCarrito.length)
                 carritoElegido.products.push(...carritoFiltrado);    
                 carrito.splice(carritoElegidoIndex,1,carritoElegido);
@@ -288,26 +264,15 @@ export default class FileContainer {
             logger.error(`El mail de contacto ${user.email} ya está utilizado, ingrese otro email`)
             return false
             } 
-
+            const id = crypto.randomBytes(10).toString('hex');
             const date = new Date().toLocaleString();
-            let nextID = 1;
-            let agregarData;
-            if(userList.length===0){
-                agregarData= {...user, id: nextID, orders:[],timestamp: date,admin:false}
-            }else{
-                for (let i=0;i<userList.length ;i++) {
-                    while( userList[i].id >= nextID ){
-                        nextID++;
-                    }
-                }
-                agregarData= {...user, orders:[], id: nextID,timestamp: date,admin:false}
-            }
-            
+            let agregarData= {...user, id: id, orders:[],timestamp: date,admin:false}
+                      
 
             userList.push(agregarData)
             const dataToJSON = JSON.stringify(userList,null,2);
             fs.writeFileSync(`${this.archivo}` , dataToJSON);
-            return agregarData.id;
+            return id;
         }catch(err){
           logger.error('Error: ', err);
           throw err
@@ -354,8 +319,11 @@ export default class FileContainer {
     async createTicket (ticketCompra) {
         try{
             const date = new Date().toLocaleString();
-            let nextOrder = 1
+            const id = crypto.randomBytes(10).toString('hex');
             const orders = await this.getAll();
+            let nextOrder = 1;
+
+            
             if(orders.length!==0){
               for (let i=0;i<orders.length ;i++) {
                   while( orders[i].orderNumber >= nextOrder ){
@@ -370,13 +338,13 @@ export default class FileContainer {
             timestamp: date,
             userId:ticketCompra.id,
             cart:ticketCompra.cart,
-            id: nextOrder
+            price: ticketCompra.price,
+            id: id
           }
+
           orders.push(newTicket)
           const dataToJSON = JSON.stringify(orders,null,2);
           fs.writeFileSync(`${this.archivo}` , dataToJSON);
-
-
 
           logger.info('Ticket creado', newTicket);
           return newTicket.id;
@@ -385,6 +353,7 @@ export default class FileContainer {
                 throw err
         }
     }
+
     async updateStock (cartProducts) {
         try{ 
             const productsList = await this.getAll();
@@ -408,6 +377,30 @@ export default class FileContainer {
             logger.error(`Error: ${err}`)
             throw err
         }
+    }
+
+    async sendMessage(message){
+        try{
+            const messages = await this.getAll();
+            const id = crypto.randomBytes(10).toString('hex');
+            let agregarData;
+            agregarData= {...message, id: id}
+            messages.push(agregarData);
+            const dataToJSON = JSON.stringify(messages,null,2);
+            fs.writeFileSync(`${this.archivo}` , dataToJSON);
+            return id;
+          }catch(err){logger.error(`Error: ${err}`)}
+    }
+    async getMessageByEmail(email){
+        try{
+            const chatList = await this.getAll()
+            const documents = chatList.filter(chat => chat.email === email);
+            if (documents.length === 0) {
+                return null;
+            } else {
+                return documents;
+            }
+          }catch(err){logger.error(`Error: ${err}`)}
     }
  
 }

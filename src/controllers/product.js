@@ -4,7 +4,7 @@ import path from 'path'
 import Singleton from '../utils/Singleton.js';
 
 const { daos } = Singleton.getInstance()
-const { productsDao , usersDao } = daos
+const { productsDao , usersDao , cartsDao } = daos
 
 const getAll = async (req,res)=>{  
   const data = await productsDao.getAll();
@@ -64,6 +64,72 @@ const getProduct = async (req,res)=>{
   }
 }
 
+const addProductToCart = async (req,res) => {
+  const findID = req.params.id;
+  const idMongo = req.session && req.session.idMongo;
+  let carritoID = req.session && req.session.carritoID;
+  const product = await productsDao.getById(findID)
+  const usuario = await usersDao.getById(idMongo);
+  let cart;
+  const productsList=[];
+  const body = req.body;
+
+
+  if(usuario && usuario.cart){
+    carritoID = usuario.cart
+    cart = await cartsDao.getById(usuario.cart);
+  } else if(usuario && carritoID ){
+    await cartsDao.addUserToCart(carritoID, usuario);
+    await usersDao.addCartToUser(idMongo,carritoID);
+    cart = await cartsDao.getById(carritoID);
+  } else if(usuario){
+    carritoID = await cartsDao.newCart()
+    await usersDao.addCartToUser(idMongo,carritoID);
+    cart = await cartsDao.getById(carritoID)
+  }
+  if(!usuario && body.loggin){
+    res.redirect('/api/users/login')
+    return false;
+  }else if(!usuario && !body.loggin){
+    if(carritoID){
+      cart = await cartsDao.getById(carritoID)
+    }else{
+      carritoID = await cartsDao.newCart()
+      cart = await cartsDao.getById(carritoID)  
+    }
+  }
+  let cantidadReq = parseInt(body.quantity);
+  if( isNaN(cantidadReq) || cantidadReq === null) cantidadReq=1;
+  productsList.push(...cart.products)
+  const prodRepetido = await productsList.find(prod => prod.id === findID )
+  const filtroIndex = await productsList.findIndex(prod => prod.id === findID );
+  
+  if(prodRepetido && filtroIndex >= 0){
+    productsList[filtroIndex].quantity += cantidadReq;
+    if (productsList[filtroIndex].quantity > productsList[filtroIndex].stock){
+        productsList[filtroIndex].quantity = productsList[filtroIndex].stock
+    }
+  }else{
+
+      let productoACargar = {...product,quantity:cantidadReq}
+      productsList.push(productoACargar)
+  }
+  
+  if (cart===undefined){
+    res.send({error: -4, descripcion: `el carrito ID ${carritoID} no existe ingrese otro ID`});
+  }else{
+    await cartsDao.addProduct(carritoID,productsList);
+  }
+    
+  const carritoActualizado = await cartsDao.getCart(carritoID);
+  logger.info({
+    message: 'Se ha modificado el carrito',
+    data: carritoActualizado
+  })
+  req.session.carritoID = carritoID;
+  res.redirect(`/api/carts/${carritoID}/products`)
+}
+
 const getEditProduct = async (req,res)=>{   
   const findID = req.params.id;
   const findObjeto = await productsDao.getById(findID)
@@ -99,11 +165,25 @@ const setProduct = async (req,res)=>{
   }
 }
 
+const getCategory = async (req,res) => {
+  const category = req.params.category;
+  const idMongo = req.session && req.session.idMongo;
+  const productsList = await productsDao.getAll();
+  const usuario = await usersDao.getById(idMongo);
+  const categoryList = productsList.filter( (prod) => prod.category.toLowerCase().replace(/ /g, "") == category)
+
+
+  res.render(path.join(process.cwd(), '/views/pages/products.ejs'), {usuario: usuario, productsList: categoryList})
+
+}
+
 export default {
   getAll,
   createProduct,
   deleteProduct,
   getProduct,
   setProduct,
-  getEditProduct
+  getEditProduct,
+  getCategory,
+  addProductToCart
 }

@@ -64,4 +64,9 @@ usersRouter.post( '/signup' ,
 
 usersRouter.get( '/info' , userController.infoUser )
 
+//Server Info
+
+usersRouter.get( '/server' , userController.serverInfoUser )
+
+
 export default usersRouter;

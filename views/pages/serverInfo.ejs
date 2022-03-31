@@ -38,32 +38,13 @@
   </div>
   <h2 class="titulo">Datos de Usuario ID: <%=usuario.id%></h2>
   <div class="userInfoContainer">
-    <div class="userContainerImg">
-      <img src="<%=usuario.photo%>" id="userImg" alt="Avatar del usuario <%=usuario.username%>">
-    </div>
     <div class="userContainerInfo">
-      <p class="userText">Usuario: <%=usuario.username%></p>
-      <p class="userText">Nombre: <%=usuario.name%></p>
-      <p class="userText">Apellido: <%=usuario.lastname%></p>
-      <p class="userText">Mail: <%=usuario.email%></p>
-      <p class="userText">Telefono de Contacto: <%=usuario.phone%></p>
-      <p class="userText">Compras Realizadas: <%if(!orders.length){ %> No realizó ninguna compra en nuestro Sitio <% }else{ %> Realizó compras en nuestro Sitio <% } %> </p>
+      <p class="userText">Persistencia en uso: <%=server.PERS%></p>
+      <p class="userText">Puerto: <%=server.PORT%></p>
+      <p class="userText">Tiempo de sesión: <%=server.SESSION_AGE%></p>
+      <p class="userText">base de Datos: <%if(server.PERS == 'json' ){ %>./<%=server.FILE_PATH%><%}else if(server.PERS == 'mongodb' ){ %><%=server.PERS%>+srv://<%=server.DB_USER%>:<%=server.DB_PASSWORD%>@<%=server.DB_HOST%>/<%=server.DB_DATABASE%>?retryWrites=true&w=majority<%}else{ %> En memoria <% } %> </p>
+      <p class="userText">Modo: <%=server.MODE%></p>
     </div>
   </div>
-  <% if (usuario.admin) {%>
-    <button onclick="location.href='/api/users/server'" >Ver configuración del servidor</button>
-  <% } %>  
-  <%if(orders.length){ %>
-    <div class="orderContainer">
-    <% orders.forEach( (order) => { %>
-      <div id="orderId-<%= order.id %>">
-        <p class="orederText">Número de Orden: <%= order.orderNumber %></p>
-        <p class="orederText">Emición de la Orden: <%= order.timestamp %> </p>
-        <p class="orederText">Valor de la Orden: $ <%= order.price %> </p>
-        <button class="btnOrder" onclick="location.href='/api/order/<%= order.id %>'">Ver Detalle de la Orden</button>
-      </div>
-    <% }) %>
-    </div>
-  <% } %>
 </body>
 </html>

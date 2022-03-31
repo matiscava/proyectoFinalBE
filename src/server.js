@@ -5,6 +5,7 @@ import bCrypt from 'bcrypt';
 import expressMethod  from 'express-method-override';
 import passport from 'passport';
 import passportLocal from 'passport-local';
+import options from './config.js';
 
 
 const LocalStrategy = passportLocal.Strategy
@@ -25,7 +26,7 @@ export const apiSession = session({
     cookie: {
         httpOnly: false,
         secure: false,
-        maxAge: 600000
+        maxAge: options.SESSION_AGE
     }
 })
 

@@ -23,9 +23,6 @@
                   Ir a productos
                 </button>
                 <button class="btnHome" onclick="location.href='/api/carts'">
-                    Ver carritos creados
-                </button>
-                <button class="btnHome" onclick="location.href='/api/carts'">
                   Ver carritos creados
                 </button>
                 <form action="/api/carts" method="post" id="containerCreateCart" autocomplete="off">
@@ -74,9 +71,15 @@
             <p><%= product.title %></p>
             <p><%= product.description %></p>
             <p>$ <%= product.price %></p>
-            <p>Stock: <%= product.title %></p>
+            <p>Stock: <%= product.stock %></p>
             <p>ID: <%= product.id %></p>
             <p>Categoria: <%= product.category %> </p>
+            <form action="/api/products/<%= product.id %>" method="post" class="productCartForm">
+              <input type="text" name="id" id="id" value="<%=product.id%>" style="display: none;">
+              <label for="quantity" class="cartLabel">Cantidad: <input class="inputQuantity" value=0 type="number" name="quantity" id="quantity" min="0" max="<%= product.stock %>" ></label>
+              <input type="hidden" name="loggin" id="inputProductLoggin">
+              <button onclick="addProductToCart(this)">Agregar al carrito</button>
+            </form>
             <% if (usuario && usuario.admin === true){%>   
                 <div class="contenedorBtnAdmin">
                     <button class="btnEditProduct" onclick="location.href='/api/products/editar/<%= product.id %>'">Editar</button>
@@ -90,10 +93,23 @@
         </div>
 
         <script>
+          const user = <%- JSON.stringify(usuario) %>;
           function deleteProduct(input){
             const deleteOk = confirm('¿Estás seguro de eliminar el producto?')
             return (deleteOk) ? input.parentNode.submit() : false
-        }
+          }
+
+          function addProductToCart(input){
+            const loggin = confirm('Usted no está logueado, ¿desea ir al loggin antes de continuar?');
+            if(loggin){
+              document.getElementById('inputProductLoggin').value = true
+            }else{
+              document.getElementById('inputProductLoggin').value = null
+            }
+          }
+
+
+          
         </script>
   
 </body>

@@ -30,6 +30,7 @@ class PersistenceFactory {
         this.daos['usersDao'] = new UserDaoFile;
         this.daos['ticketsDao'] = new TicketsDaoFile;
         this.daos['chatsDao'] = new ChatDaoFile;
+        console.log('se conecto a json');
       }
   
       if(pers ==='mongodb'){
@@ -38,14 +39,28 @@ class PersistenceFactory {
         this.daos['usersDao'] = new UserDaoMongo();
         this.daos['ticketsDao'] = new TicketsDaoMongo();
         this.daos['chatsDao'] = new ChatDaoMongo();
+        console.log('se conecto a mongodb');
+
       }
 
-    } else if (!pers || pers === 'memory'){
+      if (pers =='memory'){
+        this.daos['productsDao'] = new ProductDaoMemory;
+        this.daos['cartsDao'] = new CartDaoMemory;
+        this.daos['usersDao'] = new UserDaoMemory;
+        this.daos['ticketsDao'] = new TicketsDaoMemory;    
+        this.daos['chatsDao'] = new ChatDaoMemory;    
+        console.log('se conecto a memory');
+  
+      }
+
+    } else if (!pers){
       this.daos['productsDao'] = new ProductDaoMemory;
       this.daos['cartsDao'] = new CartDaoMemory;
       this.daos['usersDao'] = new UserDaoMemory;
       this.daos['ticketsDao'] = new TicketsDaoMemory;    
       this.daos['chatsDao'] = new ChatDaoMemory;    
+      console.log('se conecto a memory');
+
     }
 
   }

@@ -4,11 +4,13 @@ import logger from './logger/index.js'
 import { Server as HttpServer } from 'http';
 import { Server as IOServer , Socket } from 'socket.io';
 
+
 import Singleton from './utils/Singleton.js';
 import { apiSession } from './server.js';
 
 const { daos } = Singleton.getInstance();
 const { usersDao , chatsDao } = daos;
+
 
 
 const httpServer = new HttpServer(app);
@@ -30,7 +32,8 @@ io.on('connection', async (socket) =>{
 
         socket.on('new-message', async (data) => {
             await chatsDao.sendMessage(data);
-            messages.push(data);
+            const messages = await chatsDao.getAll();
+
             io.sockets.emit('messages', messages)
         })
     }else{

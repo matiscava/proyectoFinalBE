@@ -1,4 +1,6 @@
 import logger from './../logger/index.js';
+import crypto from 'crypto';
+
 
 class MemoryContainer {
     constructor ( array ) {
@@ -14,6 +16,7 @@ class MemoryContainer {
     }
     async getById (idNum) {
         try{
+            
             const objetoFiltrado = await this.array.filter(obj => obj.id === parseInt(idNum));
             if (objetoFiltrado[0]===undefined) {
                 return null;
@@ -29,20 +32,12 @@ class MemoryContainer {
         try{
             const objeto = await this.getAll();
             const fecha = new Date().toLocaleString();
-            let nextID = 1
-            let agregarData;
-            if(objeto.length===0){
-                agregarData= {...objetoNuevo, id: nextID, timestamp: fecha}
-            }else{
-                for (let i=0;i<objeto.length ;i++) {
-                    while( objeto[i].id >= nextID ){
-                        nextID++;
-                    }
-                }
-                agregarData= {...objetoNuevo, id: nextID, timestamp: fecha}
-            }
+            const id = crypto.randomBytes(10).toString('hex');
+            
+            let agregarData= {...objetoNuevo, id: id, timestamp: fecha}
+
             this.array.push(agregarData);
-            return agregarData;
+            return id;
         } catch (error) {
             logger.error('Error: ', error);
             throw error;
@@ -81,66 +76,36 @@ class MemoryContainer {
     async newCart(){
         try{
             const objeto = this.array;
-            let nextID = 1;
-            let carritoNuevo;
             const fecha = new Date().toLocaleString();
-            if(objeto.length===0){
-                carritoNuevo={id: nextID, timestamp: fecha, products:[] }
-            }else{
-                for (let i=0;i<objeto.length ;i++) {
-                    while( objeto[i].id >= nextID ){
-                        nextID++;
-                    }
-                }
-                carritoNuevo={id: nextID, timestamp: fecha, products:[]}
-            }
+            const id = crypto.randomBytes(10).toString('hex');
+
+            let carritoNuevo={id: id, timestamp: fecha, products:[] }
+
             this.array.push(carritoNuevo);
             
-            return nextID;
+            return id;
         } catch (error) {
             logger.error('Error: ', error);
             throw error;
         }
     }
-    async addProduct(carritoId,producto){
-        try {
-        
-        const carrito = this.array;
-        const carritoElegido = carrito.find( (carro) => carro.id === parseInt(carritoId) );
-        const fecha = new Date().toLocaleString();
-        carritoElegido.timestamp = fecha;
-        carritoElegido.products = producto;
-    } catch (error) {
-        logger.error('Error: ', error);
-        throw error;
-    }
-    }
 
-    async agregarXId(carritoId,arrayProductos){
+    async addCartToUser(userID,cartID){
         try{
-            
-            const carritos = this.array;
-            const carritoElegido = carritos.find( (carro) => carro.id === carritoId );
-            const carritoElegidoIndex = carritos.findIndex((carro) => carro.id === parseInt(carritoId));
-            const fecha = new Date().toLocaleString();
-        
-            carritoElegido.timestamp = fecha;
-            arrayProductos.forEach((produ) => {
-            
-                const productoRepetido = carritoElegido.products.find( (producto) => producto.id === produ.id);
-                if(productoRepetido===undefined){
-                    carritoElegido.products.push(produ);
-                }else{
-                    productoRepetido.timestamp=fecha
-                    productoRepetido.quantity+=produ.quantity;
-                }
-
-            });
-    
-            this.array.splice(carritoElegidoIndex,1,carritoElegido);
-        } catch (error) {
-            logger.error('Error: ', error);
-            throw error;
+            const user = await this.getById(userID);
+            const userList = this.array;
+            const date = new Date().toDateString();
+            if(user.cart){
+                return null
+            }else{
+                const userIndex =  userList.findIndex((obj) => obj.id === parseInt(userID))
+                user.cart = cartID;
+                user.timestamp = date;
+                this.array.splice(userIndex,1,user)
+            }
+        }catch(err){
+            logger.error('Error: ', err);
+            throw err;
         }
     }
 
@@ -167,7 +132,36 @@ class MemoryContainer {
           logger.error('Error: ', err);
           throw err;
         }
-      }
+    }
+
+    async closeCart(userID,ticketID){
+        try{
+            const date = new Date().toLocaleString();
+            const user = await this.getById(userID);
+            const userList = this.array;
+            const userIndex =  userList.findIndex((obj) => obj.id === parseInt(userID))
+            user.cart = '';
+            user.oreder.push(ticketID)
+            user.timestamp = date;
+            this.array.splice(userIndex,1,user)
+        }catch (error) {
+            logger.error('Error: ', error);
+            throw error;
+        }
+    }
+
+    async addProduct(carritoId,producto){
+        try {
+            const carrito = this.array;
+            const carritoElegido = carrito.find( (carro) => carro.id === parseInt(carritoId) );
+            const fecha = new Date().toLocaleString();
+            carritoElegido.timestamp = fecha;
+            carritoElegido.products = producto;
+        } catch (error) {
+            logger.error('Error: ', error);
+            throw error;
+        }
+    }
 
     async getCart(carritoId){
         try{
@@ -191,6 +185,7 @@ class MemoryContainer {
             throw error;
         }
     }
+
     async deleteItem(carritoId, productoId){
         try{
             const carrito = this.array;
@@ -216,6 +211,127 @@ class MemoryContainer {
             throw error;
         }
     }
+
+    async createUser (user){
+        try{
+            const userList = this.array;
+            const id = crypto.randomBytes(10).toString('hex');
+            
+            //CORROBORANDO QUE NO SE REPITA EL USERNAME EN LA BASE DE DATOS
+            let userRepeated = userList.find(usu => usu.username == user.username)
+            if (userRepeated){
+                logger.error(`El usuario ${user.username} ya está utilizado, ingrese otro username`)
+                return false
+            } 
+            // CORROBORANDO QUE NO SE REPITA EL EMAIL EN LA BASE DE DATOS
+            userRepeated = userList.find(usu => usu.email == user.email)
+            if (userRepeated){
+                logger.error(`El mail de contacto ${user.email} ya está utilizado, ingrese otro email`)
+                return false
+            } 
+
+            let agregarData= {...user, id: id}
+
+            this.array.push(agregarData)
+
+            return id;
+        }catch(err){
+            logger.error('Error: ', err);
+            throw err;
+        }
+    }
+
+    async findUser(email){
+        try{
+            const user = await this.array.find(usu => usu.email === email);
+            return user;
+          }catch(err){logger.error(`Error: ${err}`)}
+    }
+
+    async previewTicket(cart,productsList){
+        try{
+            const cartProductsList = cart.products;
+            cartProductsList.forEach(prod => {
+                let productRepeated = productsList.find( (produ) => produ.id === prod.id )
+                if(prod.quantity > productRepeated.stock) {
+                  prod.quantity = productRepeated.stock;
+                }
+              })
+
+            await this.addProduct(cart.id, cartProductsList)
+            console.log(`Se ha modificado el carrito ${cart.id}`);
+            const updatedCart =  await this.getById(cart.id)
+            return updatedCart
+          }catch(err){logger.error(`Error: ${err}`)}
+    }
+
+    async createTicket(ticketCompra){
+        try{
+            const date = new Date().toLocaleString();
+            let nextOrder = 1;
+            const id = crypto.randomBytes(10).toString('hex');
+            const orders = await this.array;
+            if(orders.length!==0){
+                for (let i=0;i<orders.length ;i++) {
+                    while( orders[i].orderNumber >= nextOrder ){
+                      nextOrder++;
+                    }
+                }
+            }
+            const newTicket = {
+                email:ticketCompra.email,
+                orderNumber: nextOrder,
+                timestamp: date,
+                userId:ticketCompra.id,
+                cart:ticketCompra.cart,
+                price: ticketCompra.price,
+                id: id,
+            }            
+            logger.info(newTicket);
+            this.array.push(newTicket)
+            return newTicket.id
+          }catch(err){logger.error(`Error: ${err}`)}
+    }
+
+    async updateStock(cartProducts){
+        try{
+            const productsList = await this.getAll();
+            const newStock = []
+            cartProducts.forEach(prod => {
+              const productRepeated =  productsList.find( (product) => product.id === prod.id )    
+              productRepeated.stock -= prod.quantity;
+        
+              if(productRepeated.stock < 0) productRepeated.stock=0;
+      
+              newStock.push({id: productRepeated.id, stock: productRepeated.stock})
+              for( let i = 0 ; i < newStock.length ; i++){
+                const updatedProduct = this.update(newStock[i].id , {stock: newStock[i].stock})
+                console.log(`Se ha modificado el producto id: ${newStock[i].id}`);
+               }
+            });
+          }catch(err){logger.error(`Error: ${err}`)}
+    }
+
+    async sendMessage(message){
+        try{
+            const id = crypto.randomBytes(10).toString('hex');
+            let agregarData= {...message, id: id}
+            this.array.push(agregarData)
+            return id;
+          }catch(err){logger.error(`Error: ${err}`)}
+    }
+    async getMessageByEmail(email){
+        try{
+            const documents = await this.array.filter(chat => chat.email === email);
+            if (documents.length === 0) {
+                return null;
+            } else {
+
+                return documents;
+            }
+          }catch(err){logger.error(`Error: ${err}`)}
+    }
+
 }
 
 export default MemoryContainer

@@ -1,4 +1,3 @@
-import logger from '../logger/index.js';
 import path from 'path'
 
 import Singleton from '../utils/Singleton.js';

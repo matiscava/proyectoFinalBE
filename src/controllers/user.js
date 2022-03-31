@@ -1,6 +1,6 @@
 import path from 'path';
-
 import logger from '../logger/index.js' 
+import options from '../config.js';
 
 import { newUserMailOptions , transporter } from '../utils/nodemailerSettings.js';
 import { createHash , isValidPassword } from '../utils/bCryptSetting.js';
@@ -163,12 +163,24 @@ const getHome = async (req,res)=>{
   const idMongo = req.session && req.session.idMongo;
   const carritoID = req.session && req.session.carritoID;
   const usuario = await usersDao.getById(idMongo);
+
   if (!usuario){
     res.render(path.join(process.cwd(), '/views/pages/home.ejs'), {usuario: null , carritoID: carritoID})
   }else{  
       res.redirect('/api/products')
-    // res.render(path.join(process.cwd(), '/views/pages/home.ejs'), {usuario: usuario, carritoID: carritoID})
   }
+}
+
+const serverInfoUser = async (req,res) => {
+  const idMongo = req.session && req.session.idMongo;
+  const usuario = await usersDao.getById(idMongo);
+  const carritoID = req.session && req.session.carritoID;
+  if (!usuario){
+    res.redirect('/api/products')
+  }else{  
+    res.render(path.join(process.cwd(), '/views/pages/serverInfo.ejs'), {usuario: usuario , carritoID: carritoID, server: options})
+  }
+
 }
 
 export default {
@@ -182,5 +194,6 @@ export default {
   infoUser,
   loginPassportUser,
   signupPassportUser,
-  getHome
+  getHome,
+  serverInfoUser
 }
