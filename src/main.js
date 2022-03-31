@@ -1,4 +1,4 @@
-import env from './env.js'
+// import env from './env.js'
 import app from './server.js'
 import logger from './logger/index.js'
 import { Server as HttpServer } from 'http';
