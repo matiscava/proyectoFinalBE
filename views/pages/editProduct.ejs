@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Edicion del Producto: <%= product.id %></title>
   <link rel="stylesheet" href="/css/estilos.css">
 </head>
 <body>
@@ -55,7 +55,7 @@
      <% } %> 
 
      <% if (usuario && usuario.admin === true){%>    
-      <form action="/api/products/editar/<%= product.id %> " method="POST" autocomplete="off">
+      <form action="/api/products/editar/<%= product.id %>" method="POST" autocomplete="off">
           <div >
               <label class="formLabel" for="title">Ingrese el nombre del producto: <input id="title" type="text" name="title" value="<%= product.title  %> " required></label>
               <label class="formLabel" for="description">Ingrese la descripción del producto: <input id="description" type="text" name="description" value="<%= product.description  %> " required></label>
