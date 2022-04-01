@@ -107,3 +107,16 @@
 {"level":"error","message":"Error: TypeError: messages.push is not a function"}
 {"level":"error","message":"Error: TypeError: messages.push is not a function"}
 {"level":"error","message":"Error: TypeError: this.getAll(...).filter is not a function"}
+{"code":20003,"level":"error","moreInfo":"https://www.twilio.com/docs/errors/20003","status":401}
+{"level":"error","message":"Error:  lista is not defined","stack":"ReferenceError: lista is not defined\n    at CartDaoMemory.deleteById (file:///C:/Users/tecnopolis%20x14/Desktop/Matias%20Scavarelli/Mati/Desarrollo%20web/Backend/FinalProyect/src/containers/MemoryContainer.js:48:35)\n    at mekeTicket (file:///C:/Users/tecnopolis%20x14/Desktop/Matias%20Scavarelli/Mati/Desarrollo%20web/Backend/FinalProyect/src/controllers/cart.js:204:18)"}
+{"code":20003,"level":"error","moreInfo":"https://www.twilio.com/docs/errors/20003","status":401}
+{"level":"error","message":"Error:  lista is not defined","stack":"ReferenceError: lista is not defined\n    at CartDaoMemory.deleteById (file:///C:/Users/tecnopolis%20x14/Desktop/Matias%20Scavarelli/Mati/Desarrollo%20web/Backend/FinalProyect/src/containers/MemoryContainer.js:48:35)\n    at mekeTicket (file:///C:/Users/tecnopolis%20x14/Desktop/Matias%20Scavarelli/Mati/Desarrollo%20web/Backend/FinalProyect/src/controllers/cart.js:204:18)"}
+{"code":20003,"level":"error","moreInfo":"https://www.twilio.com/docs/errors/20003","status":401}
+{"level":"error","message":"Error:  Cannot read property 'push' of undefined","stack":"TypeError: Cannot read property 'push' of undefined\n    at UserDaoMemory.closeCart (file:///C:/Users/tecnopolis%20x14/Desktop/Matias%20Scavarelli/Mati/Desarrollo%20web/Backend/FinalProyect/src/containers/MemoryContainer.js:144:25)\n    at async mekeTicket (file:///C:/Users/tecnopolis%20x14/Desktop/Matias%20Scavarelli/Mati/Desarrollo%20web/Backend/FinalProyect/src/controllers/cart.js:205:3)"}
+{"code":20003,"level":"error","moreInfo":"https://www.twilio.com/docs/errors/20003","status":401}
+{"level":"error","message":"Error:  Cannot read property 'push' of undefined","stack":"TypeError: Cannot read property 'push' of undefined\n    at UserDaoMemory.closeCart (file:///C:/Users/tecnopolis%20x14/Desktop/Matias%20Scavarelli/Mati/Desarrollo%20web/Backend/FinalProyect/src/containers/MemoryContainer.js:144:26)\n    at async mekeTicket (file:///C:/Users/tecnopolis%20x14/Desktop/Matias%20Scavarelli/Mati/Desarrollo%20web/Backend/FinalProyect/src/controllers/cart.js:205:3)"}
+{"code":20003,"level":"error","moreInfo":"https://www.twilio.com/docs/errors/20003","status":401}
+{"level":"error","message":"Error:  date is not defined","stack":"ReferenceError: date is not defined\n    at UserDaoMemory.createUser (file:///C:/Users/tecnopolis%20x14/Desktop/Matias%20Scavarelli/Mati/Desarrollo%20web/Backend/FinalProyect/src/containers/MemoryContainer.js:233:69)\n    at Strategy.signupPassportUser [as _verify] (file:///C:/Users/tecnopolis%20x14/Desktop/Matias%20Scavarelli/Mati/Desarrollo%20web/Backend/FinalProyect/src/controllers/user.js:159:33)"}
+{"code":20003,"level":"error","moreInfo":"https://www.twilio.com/docs/errors/20003","status":401}
+{"code":20003,"level":"error","moreInfo":"https://www.twilio.com/docs/errors/20003","status":401}
+{"code":20003,"level":"error","moreInfo":"https://www.twilio.com/docs/errors/20003","status":401}

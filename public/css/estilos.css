@@ -71,8 +71,15 @@ body {
   border: 2px solid #c1a0a0;
   padding: 20px 10px;
 }
-.formLabel,
-.formInput {
+.formLabel input#phone{
+  width: 95%;
+}
+#select-country{
+  width: 4.3%;
+  margin: 0;
+}
+.formLabel-products,
+.formInput-products {
   font-size: 0;
   padding: 0;
   transition: 0.5s;
@@ -581,4 +588,27 @@ body {
 .mensajetext--message {
   color: green;
   font-style: italic;
+}
+/*TICKET VIEW*/
+
+/* .cartItemsTexts{
+  display: flex;
+  flex-direction: row;
+} */
+
+
+.cartItemImgContainer{
+  width: 150px;
+  height: 150px;
+  background-color: white;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.cartItemImg{
+  max-height: 100%;
+  max-width: 100%;
 }

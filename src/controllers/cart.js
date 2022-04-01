@@ -203,6 +203,8 @@ const mekeTicket = async ( req , res ) => {
     })
   await cartsDao.deleteById(carritoID)
   await usersDao.closeCart(idMongo,ticketId)
+  req.session.carritoID = '';
+
 
   res.render(path.join(process.cwd(), '/views/pages/cartBuy.ejs'), { cartTicket: ticketCompra, ticketId: ticketId, precioFinal})
 

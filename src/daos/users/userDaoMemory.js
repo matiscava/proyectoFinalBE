@@ -13,7 +13,7 @@ class UserDaoMemory extends MemoryContainer {
             "adress": "ascas 123",
             "photo": "https://static.wikia.nocookie.net/esstarwars/images/5/56/Chewie1.jpg/revision/latest/top-crop/width/360/height/450?cb=20110816111434",
             "cart": "",
-            "id": 1,
+            "id": '5185e510dcf1325f3b10',
             "orders": [],
             "timestamp": "25/3/2022 12:32:22",
             "admin": false
@@ -29,7 +29,7 @@ class UserDaoMemory extends MemoryContainer {
             "photo": "https://cinematicos.net/wp-content/uploads/Una-explicacion-de-la-historia-de-Neo-de-The-Matrix.jpg",
             "cart": "",
             "orders": [],
-            "id": 2,
+            "id": "d0642e70c3ac233c8d76",
             "timestamp": "25/3/2022 15:14:52",
             "admin": true
         }   

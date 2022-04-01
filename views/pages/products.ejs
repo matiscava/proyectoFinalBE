@@ -62,12 +62,12 @@
             <% if (usuario && usuario.admin === true){%>    
                 <form action="/api/products" method="post" autocomplete="off" id="formAddProduct">
                     <div >
-                        <label class="formLabel" for="title">Ingrese el nombre del producto: <input id="title" class="formInput" type="text" name="title" onchange="habilitarBtn()" required></label>
-                        <label class="formLabel" for="description">Ingrese la descripción del producto: <input id="description" class="formInput" type="text" name="description" onchange="habilitarBtn()" required></label>
-                        <label class="formLabel" for="price">Ingrese el precio del producto: <input id="price" class="formInput" type="number" name="price" onchange="habilitarBtn()" required></label>
-                        <label class="formLabel" for="stock">Ingrese el stock del producto: <input id="stock" class="formInput" type="number" name="stock" onchange="habilitarBtn()" required></label>
-                        <label class="formLabel" for="category">Ingrese la categoria del producto: <input id="category" class="formInput" type="text" name="category" onchange="habilitarBtn()" required></label>
-                        <label class="formLabel" for="photo">Ingrese la URL con la imagen del producto: <input id="photo" class="formInput" type="text" name="photo" onchange="habilitarBtn()" required></label>
+                        <label class="formLabel formLabel-products" for="title">Ingrese el nombre del producto: <input id="title" class="formInput formInput-products" type="text" name="title" onchange="habilitarBtn()" required></label>
+                        <label class="formLabel formLabel-products" for="description">Ingrese la descripción del producto: <input id="description" class="formInput formInput-products" type="text" name="description" onchange="habilitarBtn()" required></label>
+                        <label class="formLabel formLabel-products" for="price">Ingrese el precio del producto: <input id="price" class="formInput formInput-products" type="number" name="price" onchange="habilitarBtn()" required></label>
+                        <label class="formLabel formLabel-products" for="stock">Ingrese el stock del producto: <input id="stock" class="formInput formInput-products" type="number" name="stock" onchange="habilitarBtn()" required></label>
+                        <label class="formLabel formLabel-products" for="category">Ingrese la categoria del producto: <input id="category" class="formInput formInput-products" type="text" name="category" onchange="habilitarBtn()" required></label>
+                        <label class="formLabel formLabel-products" for="photo">Ingrese la URL con la imagen del producto: <input id="photo" class="formInput formInput-products" type="text" name="photo" onchange="habilitarBtn()" required></label>
                     </div>
                     <button class="formBtn" id="btnNewProduct" disabled>Enviar</button>
                 </form>

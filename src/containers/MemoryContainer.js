@@ -17,7 +17,7 @@ class MemoryContainer {
     async getById (idNum) {
         try{
             
-            const objetoFiltrado = await this.array.filter(obj => obj.id === parseInt(idNum));
+            const objetoFiltrado = await this.array.filter(obj => obj.id === idNum);
             if (objetoFiltrado[0]===undefined) {
                 return null;
             }else{
@@ -45,7 +45,7 @@ class MemoryContainer {
     }
     async deleteById(idNum){
         try{
-            const elementoIndex = lista.findIndex((obj)=> obj.id === parseInt(idNum))
+            const elementoIndex = this.array.findIndex((obj)=> obj.id === idNum)
             this.array.splice(elementoIndex,1)
         } catch (error) {
             logger.error('Error: ', error);
@@ -55,8 +55,8 @@ class MemoryContainer {
     async update(id,elemento){
         try{
             const data = this.array;
-            const elementoGuardado = data.find((obj)=> obj.id === parseInt(id))
-            const elementoIndex = data.findIndex((obj)=> obj.id === parseInt(id))
+            const elementoGuardado = data.find((obj)=> obj.id === id)
+            const elementoIndex = data.findIndex((obj)=> obj.id === id)
             if (!elementoGuardado){
                 logger.error(`El elemento con el id: ${id}, no existe`);
                 return null;
@@ -98,7 +98,7 @@ class MemoryContainer {
             if(user.cart){
                 return null
             }else{
-                const userIndex =  userList.findIndex((obj) => obj.id === parseInt(userID))
+                const userIndex =  userList.findIndex((obj) => obj.id === userID)
                 user.cart = cartID;
                 user.timestamp = date;
                 this.array.splice(userIndex,1,user)
@@ -117,8 +117,8 @@ class MemoryContainer {
             const carritos = this.array;
             const elemento = {adress: userAdress, email: userEmail,timestamp:fecha}
             
-            const elementoGuardado = carritos.find((obj)=> obj.id === parseInt(cartId))
-            const elementoIndex = carritos.findIndex((obj)=> obj.id === parseInt(cartId))
+            const elementoGuardado = carritos.find((obj)=> obj.id === cartId)
+            const elementoIndex = carritos.findIndex((obj)=> obj.id === cartId)
             if (!elementoGuardado){
                 logger.error(`El elemento con el id: ${id}, no existe`);
                 return null;
@@ -139,9 +139,9 @@ class MemoryContainer {
             const date = new Date().toLocaleString();
             const user = await this.getById(userID);
             const userList = this.array;
-            const userIndex =  userList.findIndex((obj) => obj.id === parseInt(userID))
+            const userIndex =  userList.findIndex((obj) => obj.id === userID)
             user.cart = '';
-            user.oreder.push(ticketID)
+            user.orders.push(ticketID)
             user.timestamp = date;
             this.array.splice(userIndex,1,user)
         }catch (error) {
@@ -153,7 +153,7 @@ class MemoryContainer {
     async addProduct(carritoId,producto){
         try {
             const carrito = this.array;
-            const carritoElegido = carrito.find( (carro) => carro.id === parseInt(carritoId) );
+            const carritoElegido = carrito.find( (carro) => carro.id === carritoId );
             const fecha = new Date().toLocaleString();
             carritoElegido.timestamp = fecha;
             carritoElegido.products = producto;
@@ -166,7 +166,7 @@ class MemoryContainer {
     async getCart(carritoId){
         try{
             const carrito = this.array;
-            const carritoElegido = await carrito.find( (carro) => carro.id === parseInt(carritoId) );
+            const carritoElegido = await carrito.find( (carro) => carro.id === carritoId );
             logger.info(carritoElegido);
             return carritoElegido;
         } catch (error) {
@@ -178,7 +178,7 @@ class MemoryContainer {
     async emptyCart(carritoId){
         try{
             const carrito = this.array;
-            const carritoElegidoIndex = carrito.findIndex((carro) => carro.id === parseInt(carritoId));
+            const carritoElegidoIndex = carrito.findIndex((carro) => carro.id === carritoId);
             this.array.splice(carritoElegidoIndex,1);
         } catch (error) {
             logger.error('Error: ', error);
@@ -190,15 +190,15 @@ class MemoryContainer {
         try{
             const carrito = this.array;
 
-            const carritoElegido = carrito.find( (carro) => carro.id === parseInt(carritoId) );
+            const carritoElegido = carrito.find( (carro) => carro.id === carritoId );
             const fecha = new Date().toLocaleString();
         
             carritoElegido.timestamp = fecha;
-            const carritoElegidoIndex = carrito.findIndex((carro) => carro.id === parseInt(carritoId));
+            const carritoElegidoIndex = carrito.findIndex((carro) => carro.id === carritoId);
             const productosCarrito = carritoElegido.products;
-            const producto = productosCarrito.find((carro) => carro.id === parseInt(productoId))
+            const producto = productosCarrito.find((carro) => carro.id === productoId)
             if(producto!==undefined){
-                const carritoFiltrado = productosCarrito.filter( (carro) => carro.id !== parseInt(productoId));
+                const carritoFiltrado = productosCarrito.filter( (carro) => carro.id !== productoId);
                 carritoElegido.products.splice(0,productosCarrito.length)
                 carritoElegido.products.push(...carritoFiltrado);    
                 this.array.splice(carritoElegidoIndex,1,carritoElegido);
@@ -216,6 +216,8 @@ class MemoryContainer {
         try{
             const userList = this.array;
             const id = crypto.randomBytes(10).toString('hex');
+            const date = new Date().toLocaleString();
+
             
             //CORROBORANDO QUE NO SE REPITA EL USERNAME EN LA BASE DE DATOS
             let userRepeated = userList.find(usu => usu.username == user.username)
@@ -230,7 +232,7 @@ class MemoryContainer {
                 return false
             } 
 
-            let agregarData= {...user, id: id}
+            let agregarData= {...user, id: id, orders:[],timestamp: date,admin:false}
 
             this.array.push(agregarData)
 

@@ -32,13 +32,18 @@
 </div>      
   <h2>Felicitaciones <%= cartTicket.username %>, ha finalizado su compra</h2>
   <p>El número de referencia es <%= ticketId %></p>
-  <% cartTicket.cart[0].products.forEach( (product) => { %>
+  <% cartTicket.cart.products.forEach( (product) => { %>
     <div class="cartItemContainer">
+      <div class="cartItemImgContainer">
+        <img src="<%= product.photo %>" alt="Imagen del producto: <%= product.title %>" class="cartItemImg">
+      </div>
       <div class="cartItemsTexts">
-        <p class="cartItemTitle"><%= product.title %></p>
-        <p class="cartItemQunatity">Cantidad: <%= product.quantity %></p>
-        <p class="cartItemQunatity">Valor por unidad: $<%= product.price %></p>
-        <p class="cartItemQunatity">Subtotal: $<%= product.quantity * product.price %></p>
+        <div class="cartItemTextContainer">
+          <p class="cartItemTitle"><%= product.title %></p>
+          <p class="cartItemQunatity">Cantidad: <%= product.quantity %></p>
+          <p class="cartItemQunatity">Valor por unidad: $<%= product.price %></p>
+          <p class="cartItemQunatity">Subtotal: $<%= product.quantity * product.price %></p>
+        </div>
       </div>
     </div>
   <%})%>

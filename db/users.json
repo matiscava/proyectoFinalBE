@@ -8,10 +8,12 @@
     "phone": "11 5563 3083",
     "adress": "ascas 123",
     "photo": "https://static.wikia.nocookie.net/esstarwars/images/5/56/Chewie1.jpg/revision/latest/top-crop/width/360/height/450?cb=20110816111434",
-    "cart": "bdb78eaa0898c75cfbb9",
+    "cart": "b4924bd0336a5f39a811",
     "id": "5185e510dcf1325f3b10",
-    "orders": [],
-    "timestamp": "25/3/2022 14:48:02",
+    "orders": [
+      "abd2c7545f2d4a5e2e0c"
+    ],
+    "timestamp": "1/4/2022 10:48:03",
     "admin": false
   },
   {
@@ -28,5 +30,20 @@
     "id": "d0642e70c3ac233c8d76",
     "timestamp": "25/3/2022 15:14:52",
     "admin": true
+  },
+  {
+    "username": "Jperez",
+    "password": "$2b$10$AMRGlB2Et1OdMiP2/cMszeL3J38g21j0j8UEgA0rOS6thx0fUOM4e",
+    "email": "matiscava@gmail.com",
+    "name": "Juan",
+    "lastname": "Perez",
+    "phone": "11 5563 3083",
+    "adress": "Moldes 3083",
+    "photo": "https://www.clarin.com/img/2021/07/24/ratoncito-perez-una-imagen-del___3VhDOxaTG_720x0__1.jpg",
+    "cart": "",
+    "id": "fc79e43d7e91f070bb6f",
+    "orders": [],
+    "timestamp": "1/4/2022 11:16:40",
+    "admin": false
   }
 ]

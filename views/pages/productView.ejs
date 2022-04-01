@@ -100,11 +100,15 @@
           }
 
           function addProductToCart(input){
-            const loggin = confirm('Usted no está logueado, ¿desea ir al loggin antes de continuar?');
-            if(loggin){
-              document.getElementById('inputProductLoggin').value = true
+            if (!user){
+                const loggin = confirm('Usted no está logueado, ¿desea ir al loggin antes de continuar?');
+              if(loggin){
+                document.getElementById('inputProductLoggin').value = true
+              }else{
+                document.getElementById('inputProductLoggin').value = null
+              }  
             }else{
-              document.getElementById('inputProductLoggin').value = null
+                document.getElementById('inputProductLoggin').value = null
             }
           }
 

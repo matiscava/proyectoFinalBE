@@ -11,7 +11,7 @@ class TicketDaoMongo extends MongoContainer {
       orderNumber: {type: Number, required: true},
       timestamp: {type: String, required: true},
       userId:{type: String, required: true},
-      cart: {type: Array, required:true},
+      cart: {type: Object, required:true},
       price: {type: Number, required: true}
     })
   }

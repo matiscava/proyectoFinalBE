@@ -9,7 +9,7 @@ import Singleton from '../utils/Singleton.js';
 import { renameField } from '../utils/objectsUtils.js';
 
 const { daos } = Singleton.getInstance()
-const { usersDao , ticketsDao } = daos;
+const { usersDao , ticketsDao , cartsDao } = daos;
 
 const loginUser = async ( req , res ) => {
   if (req.isAuthenticated()) {
@@ -33,8 +33,15 @@ const loginUser = async ( req , res ) => {
 const postLoginUser = async ( req , res ) => {
   const { username , password } = req.body;
   const user = await usersDao.findUser(username);
-
   req.session.idMongo = user.id;
+  let carritoID = req.session && req.session.carritoID;
+
+  if (!user.cart && carritoID){
+    await cartsDao.addUserToCart(carritoID, usuario);
+    await usersDao.addCartToUser(idMongo,carritoID);
+  }else if (user.cart){
+    req.session.carritoID = user.cart;
+  }
 
   res.redirect('/api/products');
 }
@@ -85,11 +92,9 @@ const infoUser = async ( req , res ) => {
     res.redirect('/api/users/login')
   }else{
     let orders = []
-
     for(let i = 0 ; i < usuario.orders.length; i++){
       const userOrder = await ticketsDao.getById(usuario.orders[i])
       orders.push(userOrder)
-
     }
     res.render(path.join(process.cwd(), '/views/pages/info.ejs'),{usuario,orders})
   }
@@ -123,6 +128,11 @@ const loginPassportUser =   async (username , password , done ) => {
 
 const signupPassportUser =   async (req , username , email , done ) => {
   const user = await usersDao.findUser(username);
+  let carritoID = req.session && req.session.carritoID;
+  console.log('signupPassportUser: carritoID-->', carritoID);
+  if(!carritoID){
+    carritoID=''
+  }
   let photo = '';
   if (user) {
       logger.info('User already exists');
@@ -143,7 +153,7 @@ const signupPassportUser =   async (req , username , email , done ) => {
       phone: req.body.phone,
       adress: req.body.adress,
       photo: photo,
-      cart: ""
+      cart: carritoID
   }
 
   const idUser = await usersDao.createUser(newUser)

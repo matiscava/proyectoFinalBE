@@ -86,8 +86,7 @@ const addProductToCart = async (req,res) => {
     carritoID = await cartsDao.newCart()
     await usersDao.addCartToUser(idMongo,carritoID);
     cart = await cartsDao.getById(carritoID)
-  }
-  if(!usuario && body.loggin){
+  }else if(!usuario && body.loggin){
     res.redirect('/api/users/login')
     return false;
   }else if(!usuario && !body.loggin){

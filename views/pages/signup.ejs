@@ -14,13 +14,13 @@
 
     <form action="/api/users/signup" method="post" autocomplete="off">
         <div >
-            <label class="formLabel" for="name">Ingrese su nombre: <input id="name" type="text" name="name" onchange="habilitarBtn()" required></label>
-            <label class="formLabel" for="lastname">Ingrese su apellido: <input id="lastname" type="text" name="lastname" onchange="habilitarBtn()" required></label>
-            <label class="formLabel" for="photo">Ingrese la URL de su avatar: <input id="photo" type="text" name="photo"></label>
-            <label class="formLabel" for="username">Ingrese su username: <input id="username" type="text" name="username" onchange="habilitarBtn()" required></label> 
-            <label class="formLabel" for="email">Ingrese su email: <input id="email" type="email" name="email" onchange="habilitarBtn()" required></label>
+            <label class="formLabel" for="name">Ingrese su nombre: <input id="name" type="text" name="name" onchange="habilitarBtn()" placeholder="Juan" required></label>
+            <label class="formLabel" for="lastname">Ingrese su apellido: <input id="lastname" type="text" name="lastname" onchange="habilitarBtn()" placeholder="Perez" required></label>
+            <label class="formLabel" for="photo">Ingrese la URL de su avatar: <input id="photo" type="text" name="photo" placeholder="url de su avatar"></label>
+            <label class="formLabel" for="username">Ingrese su username: <input id="username" type="text" name="username" onchange="habilitarBtn()" placeholder="JuanPerez" required></label> 
+            <label class="formLabel" for="email">Ingrese su email: <input id="email" type="email" name="email" onchange="habilitarBtn()" placeholder="juanperez@yahoo.com.ar" required></label>
             <label class="formLabel" for="phone">Ingrese su telefono de contacto: 
-            <input type="text" id="phone" name="phone" onchange="habilitarBtn()" required>
+            <input type="text" id="phone" class="formInputPhone" name="phone" onchange="habilitarBtn()" placeholder="1155667788" required>
             <select id="select-country">
                 <option value="US">US</option>
                 <option value="AR">AR</option>
@@ -29,9 +29,9 @@
                 <option value="BR">BR</option>
             </select>
             </label>
-            <label class="formLabel" for="adress">Ingrese su domicilio de entrega: <input id="adress" type="text" name="adress" onchange="habilitarBtn()" required></label>
-            <label class="formLabel" for="password">Ingrese su contraseña: <input id="password" type="password" name="password" minlength="6" maxlength="12" onchange="habilitarBtn()" required></label>
-            <label class="formLabel" for="rePassword">Repita su contraseña: <input id="rePassword" type="password" name="rePassword" minlength="6" maxlength="12" onkeyup="habilitarBtn()" required></label>
+            <label class="formLabel" for="adress">Ingrese su domicilio de entrega: <input id="adress" type="text" name="adress" onchange="habilitarBtn()" placeholder="Av. Siempreviva 742" required></label>
+            <label class="formLabel" for="password">Ingrese su contraseña: <input id="password" type="password" name="password" minlength="6" maxlength="12" onchange="habilitarBtn()" placeholder="123456qwerty" required></label>
+            <label class="formLabel" for="rePassword">Repita su contraseña: <input id="rePassword" type="password" name="rePassword" minlength="6" maxlength="12" onkeyup="habilitarBtn()" placeholder="123456qwerty" required></label>
         </div>
         <button class="formBtn" id="btnFormSignup" disabled>Enviar</button>
     </form>
