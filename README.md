@@ -1,3 +1,9 @@
+# Usuario admin:
+
+email: jorgecoronabackend@gmail.com
+password: admin123
+gmailpassword: jorgecorona55
+
 # 1.
 
 ## Para correr el proyecto en modo desarrollo:
